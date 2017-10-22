@@ -1,0 +1,4 @@
+﻿{
+  Username :"ivan.kopcanski",
+  ApiUrl :"http://localhost:3000",
+  RefreshInterval: 5}

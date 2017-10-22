@@ -1,0 +1,276 @@
+﻿<Window
+    x:Class="InOutLog.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:core="clr-namespace:InOutLog.Core;assembly=InOutLog.Core"
+    xmlns:local="clr-namespace:InOutLog.Desk"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="{Binding Title}"
+    Width="300"
+    Height="210"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="SingleBorderWindow"
+    mc:Ignorable="d">
+
+    <Window.DataContext>
+        <core:MainViewModel />
+    </Window.DataContext>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding Path=InitCommand, Mode=OneWay}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    
+    <Window.Resources>
+        <local:ClockConverter x:Key="ClockConverter" />
+        <local:TimeSpanConverter x:Key="SpanConverter" />
+        <local:VisibilityInverter x:Key="VisibilityInverter" />
+        <local:MultiVisibilityConverter x:Key="VisibilityConjuctionConverter" IsConjuction="true" />
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
+        
+        <Style x:Key="TextClock" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontFamily" Value="{StaticResource Digital7}" />
+            <Setter Property="FontSize" Value="26" />
+            <Setter Property="Margin" Value="0,5,0,0" />
+        </Style>
+    </Window.Resources>
+
+    <Grid
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch">
+
+        <!--'Please wait' splash-->
+        
+        <Grid
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="White"
+            Visibility="{Binding IsInitialized, Converter={StaticResource VisibilityInverter}}">
+
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"    
+                Style="{StaticResource TextClock}"
+                Text="Please wait..." />
+
+        </Grid>
+
+        <!-- Commands & Watchers -->
+        
+        <Grid
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="White"
+            Visibility="{Binding IsInitialized, Converter={StaticResource VisibilityConverter}}">
+
+            <Grid.RowDefinitions>
+                <!--  divider  -->
+                <RowDefinition Height="10" />
+                <!--  checkin  -->
+                <RowDefinition Height="35" />
+                <!--  checkout  -->
+                <RowDefinition Height="35" />
+                <!--  divider  -->
+                <RowDefinition Height="10" />
+                <!--  breakin  -->
+                <RowDefinition Height="35" />
+                <!--  breakout  -->
+                <RowDefinition Height="35" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <!--  commands  -->
+                <ColumnDefinition Width=".30*" />
+                <!--  timings  -->
+                <ColumnDefinition Width=".30*" />
+                <!--  results  -->
+                <ColumnDefinition Width=".30*" />
+            </Grid.ColumnDefinitions>
+
+            <!--  checkin  -->
+
+            <Button
+                Grid.Row="1"
+                Grid.Column="0"
+                Width="70"
+                Height="30"
+                Command="{Binding Watcher.CheckInCommand}">
+                Check in
+            </Button>
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="1"
+                Style="{StaticResource TextClock}"
+                Text="{Binding Watcher.State.Data.StartedAt, Converter={StaticResource ClockConverter}}" />
+
+            <!--  checkout  -->
+
+            <Button
+                Grid.Row="2"
+                Grid.Column="0"
+                Width="70"
+                Height="30"
+                Command="{Binding Watcher.CheckOutCommand}">
+                Check out
+            </Button>
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="1"
+                Style="{StaticResource TextClock}"
+                Text="{Binding Watcher.State.Data.StoppedAt, Converter={StaticResource ClockConverter}}" />
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="2"
+                Style="{StaticResource TextClock}"
+                Text="{Binding Watcher.State.Data.CheckInTime, Converter={StaticResource SpanConverter}}" />
+
+            <!--  breakin  -->
+
+            <Button
+                Grid.Row="4"
+                Grid.Column="0"
+                Width="70"
+                Height="30"
+                Command="{Binding Watcher.BreakInCommand}">
+                Break in
+            </Button>
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="1"
+                Style="{StaticResource TextClock}"
+                Text="{Binding Watcher.State.Data.BreakStartedAt, Converter={StaticResource ClockConverter}}" />
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="2"
+                Style="{StaticResource TextClock}"
+                Text="{Binding Watcher.State.Data.CurrentBreakInTime, Converter={StaticResource SpanConverter}}"
+                Visibility="{Binding Watcher.IsInBreak, Converter={StaticResource VisibilityConverter}}" />
+
+            <!--  breakout  -->
+
+            <Button
+                Grid.Row="5"
+                Grid.Column="0"
+                Width="70"
+                Height="30"
+                Command="{Binding Watcher.BreakOutCommand}">
+                Break out
+            </Button>
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="1"
+                Style="{StaticResource TextClock}"
+                Text="{Binding Watcher.State.Data.BreakStoppedAt, Converter={StaticResource ClockConverter}}" />
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="2"
+                Style="{StaticResource TextClock}"
+                Text="{Binding Watcher.State.Data.TotalBreakInTime, Converter={StaticResource SpanConverter}}" />
+
+
+        </Grid>
+
+        <!-- Final Results -->
+        
+        <Grid   
+                Grid.RowSpan="6"
+                Grid.ColumnSpan="3"
+                Background="White">
+
+            <Grid.Visibility>
+                <MultiBinding Converter="{StaticResource VisibilityConjuctionConverter}">
+                    <Binding Path="IsInitialized"/>
+                    <Binding Path="Watcher.IsStopped" />
+                </MultiBinding>
+            </Grid.Visibility>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height=".25*" />
+                <RowDefinition Height=".25*" />
+                <RowDefinition Height=".25*" />
+                <RowDefinition Height=".25*" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".60*" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width=".40*" />
+            </Grid.ColumnDefinitions>
+
+            <!--  Labels  -->
+
+            <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource TextClock}"
+                    Text="CHECKED-IN AT:" />
+
+            <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource TextClock}"
+                    Text="CHECK-IN TIME:" />
+
+            <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource TextClock}"
+                    Text="BREAK-IN TIME:" />
+
+            <TextBlock
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource TextClock}"
+                    Text="WORKING TIME:" />
+
+            <!--  Totals  -->
+
+            <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource TextClock}"
+                    Text="{Binding Watcher.State.Data.StartedAt, Converter={StaticResource ClockConverter}}" />
+
+            <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource TextClock}"
+                    Text="{Binding Watcher.State.Data.CheckInTime, Converter={StaticResource SpanConverter}}" />
+
+            <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource TextClock}"
+                    Text="{Binding Watcher.State.Data.TotalBreakInTime, Converter={StaticResource SpanConverter}}" />
+
+            <TextBlock
+                    Grid.Row="3"
+                    Grid.Column="2"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource TextClock}"
+                    Text="{Binding Watcher.State.Data.WorkingTime, Converter={StaticResource SpanConverter}}" />
+
+        </Grid>
+
+    </Grid>
+
+</Window>

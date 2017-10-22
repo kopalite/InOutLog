@@ -1,0 +1,9 @@
+﻿<Application
+    x:Class="InOutLog.Desk.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <FontFamily x:Key="Digital7">pack://application:,,,/Fonts/#digital-7</FontFamily>
+    </Application.Resources>
+</Application>
