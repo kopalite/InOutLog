@@ -16,7 +16,23 @@ namespace InOutLog.Core
         {
 
         }
-        
+
+        public override bool CanReset
+        {
+            get { return true; }
+        }
+
+        public override IWatcherState Reset()
+        {
+            Data.StartedAt = null;
+            Data.StoppedAt = null;
+            Data.BreakStartedAt = null;
+            Data.BreakStoppedAt = null;
+            Data.BreaksTotal = TimeSpan.Zero;
+            
+            return new IdleState(Data);
+        }
+
         public override TimeSpan GetCheckInTime()
         {
             return Data.StoppedAt.Value - Data.StartedAt.Value;

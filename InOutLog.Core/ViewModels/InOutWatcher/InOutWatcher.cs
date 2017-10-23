@@ -57,6 +57,17 @@ namespace InOutLog.Core
             get { return State.CanBreakOut; }
         }
 
+        public async Task Reset()
+        {
+            await ChangeStateAsync(() => State.Reset());
+        }
+
+        public bool CanReset
+        {
+            get { return State.CanReset; }
+        }
+
+
         private async Task ChangeStateAsync(Func<IWatcherState> action)
         {
             var entry = await _persister.RestoreAsync();
@@ -112,6 +123,12 @@ namespace InOutLog.Core
         public ICommand BreakOutCommand
         {
             get { return _breakOutCommand ?? (_breakOutCommand = RegisterCommand(new RelayCommand(async x => await BreakOut(), x => CanBreakOut))); }
+        }
+
+        private RelayCommand _resetCommand;
+        public ICommand ResetCommand
+        {
+            get { return _resetCommand ?? (_resetCommand = RegisterCommand(new RelayCommand(async x => await Reset(), x => CanReset))); }
         }
     }
 }

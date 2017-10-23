@@ -20,6 +20,9 @@ namespace InOutLog.Core
         IWatcherState BreakOut();
         bool CanBreakOut { get; }
 
+        IWatcherState Reset();
+        bool CanReset { get; }
+
         TimeSpan GetCheckInTime();
         TimeSpan GetBreakInTime();
     }

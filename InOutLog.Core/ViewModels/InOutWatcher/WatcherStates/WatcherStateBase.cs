@@ -55,6 +55,16 @@ namespace InOutLog.Core
             get { return false; }
         }
 
+        public virtual IWatcherState Reset()
+        {
+            return this;
+        }
+
+        public virtual bool CanReset
+        {
+            get { return false; }
+        }
+
         public abstract TimeSpan GetCheckInTime();
         
         public abstract TimeSpan GetBreakInTime();
