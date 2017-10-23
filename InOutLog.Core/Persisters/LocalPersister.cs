@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System;
 using System.Linq;
@@ -70,6 +70,36 @@ namespace InOutLog.Core
             await file.WriteAllTextAsync(entryJson);
             return entryJson;
 
+        }
+
+        public async Task RemoveAsync()
+        {
+            var log = new Log();
+
+            var folder = await GetLocalFolder();
+            var fileExists = await folder.CheckExistsAsync(FileName);
+            if (fileExists == ExistenceCheckResult.FileExists)
+            {
+                var existingFile = await folder.CreateFileAsync(FileName, CreationCollisionOption.OpenIfExists);
+                var content = await existingFile.ReadAllTextAsync();
+                log = JsonConvert.DeserializeObject<Log>(content);
+            }
+
+            if (log == null)
+            {
+                return;
+            }
+
+            var username = await Config.GetUsernameAsync();
+            var existingEntry = log.Entries.FirstOrDefault(x => x.Username == username && x.EntryDate == DateTime.Today);
+            if (existingEntry != null)
+            {
+                log.Entries.Remove(existingEntry);
+            }
+
+            var entryJson = JsonConvert.SerializeObject(log);
+            var file = await folder.CreateFileAsync(FileName, CreationCollisionOption.OpenIfExists);
+            await file.WriteAllTextAsync(entryJson);
         }
 
         private async Task<IFolder> GetLocalFolder()
