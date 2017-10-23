@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -85,8 +85,9 @@ namespace InOutLog.Core
                     return entryJson;
                 }
             }
-            catch
+            catch (Exception e)
             {
+                Debug.WriteLine(e.Message);
                 IsLocalMode = true;
             }
 
@@ -96,6 +97,41 @@ namespace InOutLog.Core
             };
 
             return null;
+        }
+
+        public async Task RemoveAsync()
+        {
+            if (IsLocalMode)
+            {
+                await _fallbackPersister.RemoveAsync();
+            }
+
+            HttpResponseMessage response = null;
+
+            try
+            {
+                var client = await GetClientAsync();
+                var username = await Config.GetUsernameAsync();
+                var entryDate = DateTime.Today.ToString(Entry.TodayDateFormat);
+                var url = string.Format("/api/entries/{0}/{1}", username, entryDate);
+                response = await client.DeleteAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                IsLocalMode = true;
+            }
+
+            if (IsLocalMode)
+            {
+                await _fallbackPersister.RemoveAsync();
+            }
+
+            await Task.FromResult<object>(null);
         }
 
         private async Task<HttpClient> GetClientAsync()
