@@ -1,0 +1,18 @@
+{
+  "entries": [
+    {
+      "SessionId": "12100bc2-3bf1-4b79-8ac4-f550f549398e",
+      "EntryDate": "2017-10-23",
+      "Timestamp": "2017-10-23T19:42:07.9946635Z",
+      "Username": "ivan.kopcanski",
+      "StateId": 4,
+      "Data": {
+        "StartedAt": "2017-10-23T19:42:07.9896438Z",
+        "StoppedAt": "2017-10-23T19:42:25.0291177Z",
+        "BreakStartedAt": "2017-10-23T19:42:17.431546Z",
+        "BreakStoppedAt": "2017-10-23T19:42:21.4413999Z",
+        "BreaksTotal": "00:00:06.8085241"
+      }
+    }
+  ]
+}

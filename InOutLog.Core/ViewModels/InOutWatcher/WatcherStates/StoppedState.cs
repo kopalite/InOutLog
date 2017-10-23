@@ -22,12 +22,7 @@ namespace InOutLog.Core
             return Data.StoppedAt.Value - Data.StartedAt.Value;
         }
 
-        public override TimeSpan GetCurrentBreakInTime()
-        {
-            return TimeSpan.Zero;
-        }
-
-        public override TimeSpan GetTotalBreakInTime()
+        public override TimeSpan GetBreakInTime()
         {
             return Data.BreaksTotal;
         }

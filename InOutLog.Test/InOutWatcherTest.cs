@@ -31,7 +31,7 @@ namespace InOutLog.Test
                          !_watcher.State.Data.BreakStartedAt.HasValue &&
                          !_watcher.State.Data.BreakStoppedAt.HasValue &&
                           _watcher.State.Data.CheckInTime.Ticks == 0 &&
-                          _watcher.State.Data.TotalBreakInTime.Ticks == 0);
+                          _watcher.State.Data.BreakInTime.Ticks == 0);
 
             //Assert behavior
             Assert.IsTrue(_watcher.CanCheckIn &&
@@ -56,7 +56,7 @@ namespace InOutLog.Test
                          !_watcher.State.Data.BreakStartedAt.HasValue &&
                          !_watcher.State.Data.BreakStoppedAt.HasValue &&
                           _watcher.State.Data.CheckInTime.Ticks > 0 &&
-                          _watcher.State.Data.TotalBreakInTime.Ticks == 0);
+                          _watcher.State.Data.BreakInTime.Ticks == 0);
 
             //Assert behavior
             Assert.IsTrue(!_watcher.CanCheckIn &&
@@ -82,7 +82,7 @@ namespace InOutLog.Test
                          !_watcher.State.Data.BreakStartedAt.HasValue &&
                          !_watcher.State.Data.BreakStoppedAt.HasValue &&
                           _watcher.State.Data.CheckInTime.Ticks > 0 &&
-                          _watcher.State.Data.TotalBreakInTime.Ticks == 0);
+                          _watcher.State.Data.BreakInTime.Ticks == 0);
 
             //Assert behavior
             Assert.IsTrue(!_watcher.CanCheckIn &&
@@ -109,7 +109,7 @@ namespace InOutLog.Test
                          _watcher.State.Data.BreakStartedAt.HasValue &&
                          !_watcher.State.Data.BreakStoppedAt.HasValue &&
                           _watcher.State.Data.CheckInTime.Ticks > 0 &&
-                          _watcher.State.Data.TotalBreakInTime.Ticks > 0);
+                          _watcher.State.Data.BreakInTime.Ticks > 0);
 
             //Assert behavior
             Assert.IsTrue(!_watcher.CanCheckIn &&
@@ -137,7 +137,7 @@ namespace InOutLog.Test
                          _watcher.State.Data.BreakStartedAt.HasValue &&
                          _watcher.State.Data.BreakStoppedAt.HasValue &&
                           _watcher.State.Data.CheckInTime.Ticks > 0 &&
-                          _watcher.State.Data.TotalBreakInTime.Ticks > 0);
+                          _watcher.State.Data.BreakInTime.Ticks > 0);
 
             //Assert behavior
             Assert.IsTrue(!_watcher.CanCheckIn &&
@@ -167,7 +167,7 @@ namespace InOutLog.Test
                          _watcher.State.Data.BreakStartedAt.HasValue &&
                          _watcher.State.Data.BreakStoppedAt.HasValue &&
                           _watcher.State.Data.CheckInTime.Ticks > 0 &&
-                          _watcher.State.Data.TotalBreakInTime.Ticks > 0);
+                          _watcher.State.Data.BreakInTime.Ticks > 0);
 
             //Assert behavior
             Assert.IsTrue(!_watcher.CanCheckIn &&
@@ -199,7 +199,7 @@ namespace InOutLog.Test
                          _watcher.State.Data.BreakStartedAt.HasValue &&
                          _watcher.State.Data.BreakStoppedAt.HasValue &&
                           _watcher.State.Data.CheckInTime.Ticks > 0 &&
-                          _watcher.State.Data.TotalBreakInTime.Ticks > 0);
+                          _watcher.State.Data.BreakInTime.Ticks > 0);
 
             //Assert behavior
             Assert.IsTrue(!_watcher.CanCheckIn &&
@@ -230,7 +230,7 @@ namespace InOutLog.Test
                          _watcher.State.Data.BreakStartedAt.HasValue &&
                          _watcher.State.Data.BreakStoppedAt.HasValue &&
                          _watcher.State.Data.CheckInTime.Ticks > 0 &&
-                         _watcher.State.Data.TotalBreakInTime.Ticks > 0);
+                         _watcher.State.Data.BreakInTime.Ticks > 0);
 
             //Assert behavior
             Assert.IsTrue(!_watcher.CanCheckIn &&

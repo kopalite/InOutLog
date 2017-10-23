@@ -56,9 +56,7 @@ namespace InOutLog.Core
         }
 
         public abstract TimeSpan GetCheckInTime();
-
-        public abstract TimeSpan GetCurrentBreakInTime();
-
-        public abstract TimeSpan GetTotalBreakInTime();
+        
+        public abstract TimeSpan GetBreakInTime();
     }
 }

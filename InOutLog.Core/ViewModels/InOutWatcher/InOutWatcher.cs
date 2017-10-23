@@ -40,7 +40,6 @@ namespace InOutLog.Core
         public async Task BreakIn()
         {
             await ChangeStateAsync(() => State.BreakIn());
-            IsInBreak = true;
         }
 
         public bool CanBreakIn
@@ -51,28 +50,11 @@ namespace InOutLog.Core
         public async Task BreakOut()
         {
             await ChangeStateAsync(() => State.BreakOut());
-            IsInBreak = false;
         }
 
         public bool CanBreakOut
         {
             get { return State.CanBreakOut; }
-        }
-
-        private bool _isInBreak;
-        public bool IsInBreak
-        {
-            get { return _isInBreak; }
-            private set
-            {
-                _isInBreak = value;
-                NotifyPropertyChanged(() => IsInBreak);
-            }
-        }
-
-        public bool IsStopped
-        {
-            get { return State is StoppedState; }
         }
 
         private async Task ChangeStateAsync(Func<IWatcherState> action)

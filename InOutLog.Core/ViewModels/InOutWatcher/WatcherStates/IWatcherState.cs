@@ -21,7 +21,6 @@ namespace InOutLog.Core
         bool CanBreakOut { get; }
 
         TimeSpan GetCheckInTime();
-        TimeSpan GetCurrentBreakInTime();
-        TimeSpan GetTotalBreakInTime();
+        TimeSpan GetBreakInTime();
     }
 }

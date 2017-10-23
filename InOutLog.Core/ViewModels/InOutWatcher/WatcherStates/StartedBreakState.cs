@@ -30,12 +30,7 @@ namespace InOutLog.Core
             return DateTime.UtcNow - Data.StartedAt.Value;
         }
 
-        public override TimeSpan GetCurrentBreakInTime()
-        {
-            return (DateTime.UtcNow - Data.BreakStartedAt.Value);
-        }
-
-        public override TimeSpan GetTotalBreakInTime()
+        public override TimeSpan GetBreakInTime()
         {
             return Data.BreaksTotal + (DateTime.UtcNow - Data.BreakStartedAt.Value);
         }

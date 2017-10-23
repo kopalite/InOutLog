@@ -12,7 +12,7 @@ namespace InOutLog.Desk
             
             if (value == null || !(value is TimeSpan))
             {
-                return "";
+                return "00:00:00";
             }
 
             var span = ((TimeSpan?)value).GetValueOrDefault();

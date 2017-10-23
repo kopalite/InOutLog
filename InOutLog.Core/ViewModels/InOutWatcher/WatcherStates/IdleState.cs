@@ -29,12 +29,7 @@ namespace InOutLog.Core
             return TimeSpan.Zero;
         }
 
-        public override TimeSpan GetCurrentBreakInTime()
-        {
-            return TimeSpan.Zero;
-        }
-
-        public override TimeSpan GetTotalBreakInTime()
+        public override TimeSpan GetBreakInTime()
         {
             return TimeSpan.Zero;
         }

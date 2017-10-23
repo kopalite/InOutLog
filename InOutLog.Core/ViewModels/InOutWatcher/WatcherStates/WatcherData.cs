@@ -78,21 +78,15 @@ namespace InOutLog.Core
         }
 
         [JsonIgnore]
-        public TimeSpan CurrentBreakInTime
+        public TimeSpan BreakInTime
         {
-            get { return _state.GetCurrentBreakInTime(); }
-        }
-
-        [JsonIgnore]
-        public TimeSpan TotalBreakInTime
-        {
-            get { return _state.GetTotalBreakInTime(); }
+            get { return _state.GetBreakInTime(); }
         }
 
         [JsonIgnore]
         public TimeSpan WorkingTime
         {
-            get { return _state.GetCheckInTime() - _state.GetTotalBreakInTime(); }
+            get { return _state.GetCheckInTime() - _state.GetBreakInTime(); }
         }
 
         #endregion

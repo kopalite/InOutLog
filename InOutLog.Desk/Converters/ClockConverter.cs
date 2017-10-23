@@ -13,7 +13,7 @@ namespace InOutLog.Desk
             var dateTime = value as DateTime?;
             if (dateTime == null || !dateTime.HasValue)
             {
-                return "";
+                return "00:00:00";
             }
 
             dateTime = dateTime.GetValueOrDefault().ToLocalTime(); 
