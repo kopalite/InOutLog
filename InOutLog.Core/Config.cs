@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PCLStorage;
+using System;
 using System.Threading.Tasks;
 
 namespace InOutLog.Core
@@ -20,10 +21,10 @@ namespace InOutLog.Core
             return _settings.ApiUrl;
         }
 
-        public static async Task<int> GetRefreshIntervalAsync()
+        public static async Task<TimeSpan> GetRefreshIntervalAsync()
         {
             await InitAsync();
-            return _settings.RefreshInterval;
+            return TimeSpan.FromSeconds(_settings.RefreshInterval);
         }
 
         private static async Task InitAsync()

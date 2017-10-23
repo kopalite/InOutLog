@@ -13,7 +13,7 @@ namespace InOutLog.Core
             get { return _startedAt; }
             set
             {
-                _startedAt = ToUtc(value);
+                _startedAt = value.ToUtc();
                 NotifyPropertyChanged(() => StartedAt);
             }
         }
@@ -24,7 +24,7 @@ namespace InOutLog.Core
             get { return _stoppedAt; }
             set
             {
-                _stoppedAt = ToUtc(value);
+                _stoppedAt = value.ToUtc();
                 NotifyPropertyChanged(() => StoppedAt);
             }
         }
@@ -35,7 +35,7 @@ namespace InOutLog.Core
             get { return _breakStartedAt; }
             set
             {
-                _breakStartedAt = ToUtc(value);
+                _breakStartedAt = value.ToUtc();
                 NotifyPropertyChanged(() => BreakStartedAt);
             }
         }
@@ -46,7 +46,7 @@ namespace InOutLog.Core
             get { return _breakStoppedAt; }
             set
             {
-                _breakStoppedAt = ToUtc(value);
+                _breakStoppedAt = value.ToUtc();
                 NotifyPropertyChanged(() => BreakStoppedAt);
             }
         }
@@ -65,15 +65,6 @@ namespace InOutLog.Core
                 _breaksTotal = value;
                 NotifyPropertyChanged(() => BreaksTotal);
             }
-        }
-
-        private DateTime? ToUtc(DateTime? value)
-        {
-            if (!value.HasValue)
-            {
-                return null;
-            }
-            return value.Value.ToUniversalTime();
         }
 
         #endregion

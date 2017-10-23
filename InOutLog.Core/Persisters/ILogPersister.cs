@@ -10,5 +10,7 @@ namespace InOutLog.Core
         Task<Entry> RestoreAsync();
 
         Task<string> PersistAsync(Entry entry);
+
+        Task RemoveAsync();
     }
 }

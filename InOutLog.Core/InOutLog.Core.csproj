@@ -37,8 +37,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Extensions\SyncExtensions.cs" />
     <Compile Include="Externals\Externals.cs" />
     <Compile Include="Externals\IDialog.cs" />
     <Compile Include="Externals\ISafeUI.cs" />

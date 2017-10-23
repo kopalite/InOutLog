@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System;
 using System.Linq;
@@ -22,7 +22,7 @@ namespace InOutLog.Core
                 Entries = new List<Entry>();
             }
         }
-        
+
         public async Task<Entry> RestoreAsync()
         {
             var folder = await GetLocalFolder();
@@ -35,7 +35,7 @@ namespace InOutLog.Core
             var content = await file.ReadAllTextAsync();
             var log = JsonConvert.DeserializeObject<Log>(content);
             var username = await Config.GetUsernameAsync();
-            return log.Entries.FirstOrDefault(x => x.Username == username && x.EntryDate == DateTime.Today);
+            return log.Entries.FirstOrDefault(x => x.Username == username && x.EntryDate == Entry.GetEntryDate());
 
         }
 
@@ -58,7 +58,7 @@ namespace InOutLog.Core
             }
 
             var username = await Config.GetUsernameAsync();
-            var existingEntry = log.Entries.FirstOrDefault(x => x.Username == username && x.EntryDate == DateTime.Today);
+            var existingEntry = log.Entries.FirstOrDefault(x => x.Username == username && x.EntryDate == Entry.GetEntryDate());
             if (existingEntry != null)
             {
                 log.Entries.Remove(existingEntry);
@@ -91,7 +91,7 @@ namespace InOutLog.Core
             }
 
             var username = await Config.GetUsernameAsync();
-            var existingEntry = log.Entries.FirstOrDefault(x => x.Username == username && x.EntryDate == DateTime.Today);
+            var existingEntry = log.Entries.FirstOrDefault(x => x.Username == username && x.EntryDate == Entry.GetEntryDate());
             if (existingEntry != null)
             {
                 log.Entries.Remove(existingEntry);

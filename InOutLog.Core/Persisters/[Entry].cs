@@ -7,12 +7,16 @@ namespace InOutLog.Core
 {
     public class Entry
     {
-        public const string TodayDateFormat = "yyyy-MM-dd";
-
         public string SessionId { get; set; }
-
-        [JsonConverter(typeof(TodayDateTimeConverter))]
-        public DateTime EntryDate { get; set; }
+        
+        public string EntryDate { get; set; }
+        
+        private DateTime _timestamp;
+        public DateTime Timestamp
+        {
+            get { return _timestamp; }
+            set { _timestamp = value.ToUtc(); }
+        }
 
         public string Username { get; set; }
 
@@ -25,19 +29,24 @@ namespace InOutLog.Core
             return new Entry
             {
                 SessionId = Session.SessionId,
-                EntryDate = DateTime.Today,
+                Timestamp = DateTime.UtcNow,
+                EntryDate = GetEntryDate(),
                 Username = await Config.GetUsernameAsync(),
                 StateId = stateId,
                 Data = data 
             };
         }
-    }
 
-    public class TodayDateTimeConverter : IsoDateTimeConverter
-    {
-        public TodayDateTimeConverter()
+        private const string ShortDateFormat = "yyyy-MM-dd";
+
+        internal static string GetEntryDate()
         {
-            DateTimeFormat = Entry.TodayDateFormat;
+            return DateTime.UtcNow.ToString(ShortDateFormat);
+        }
+
+        internal static string GetDisplayDate()
+        {
+            return DateTime.Now.ToString(ShortDateFormat);
         }
     }
 }

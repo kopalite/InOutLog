@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -13,13 +14,12 @@ namespace InOutLog.Core
         public InOutWatcher(ILogPersister persister, IWatcherState state)
         {
             _persister = persister;
-            State = state;
+            State = state; 
         }
 
         public async Task CheckIn()
         {
-            ChangeState(() => State.CheckIn());
-            await PersistAsync();
+            await ChangeStateAsync(() => State.CheckIn());
         }
 
         public bool CanCheckIn
@@ -29,8 +29,7 @@ namespace InOutLog.Core
 
         public async Task CheckOut()
         {
-            ChangeState(() => State.CheckOut());
-            await PersistAsync();
+           await ChangeStateAsync(() => State.CheckOut());
         }
 
         public bool CanCheckOut
@@ -40,9 +39,8 @@ namespace InOutLog.Core
 
         public async Task BreakIn()
         {
-            ChangeState(() => State.BreakIn());
+            await ChangeStateAsync(() => State.BreakIn());
             IsInBreak = true;
-            await PersistAsync();
         }
 
         public bool CanBreakIn
@@ -52,9 +50,8 @@ namespace InOutLog.Core
 
         public async Task BreakOut()
         {
-            ChangeState(() => State.BreakOut());
+            await ChangeStateAsync(() => State.BreakOut());
             IsInBreak = false;
-            await PersistAsync();
         }
 
         public bool CanBreakOut
@@ -78,17 +75,34 @@ namespace InOutLog.Core
             get { return State is StoppedState; }
         }
 
-        internal void ChangeState(Func<IWatcherState> action)
+        private async Task ChangeStateAsync(Func<IWatcherState> action)
         {
+            var entry = await _persister.RestoreAsync();
+            var interval = await Config.GetRefreshIntervalAsync();
+            if (entry != null && entry.SessionId != Session.SessionId && (DateTime.UtcNow - entry.Timestamp) < interval)
+            {
+                var dialog = Externals.Resolve<IDialog>();
+                dialog.Alert("Alert", "Syncing in progress... Please try again later.");
+                return;
+            }
+
             State = action();
             RaiseAllCanExecute();
             RaiseAllPropertyChanged();
+
+            entry = await Entry.CreateAsync(State.StateId, State.Data);
+            await _persister.PersistAsync(entry);
         }
 
-        private async Task PersistAsync()
+        internal async Task SyncEntry()
         {
-            var entry = await Entry.CreateAsync(State.StateId, State.Data);
-            await _persister.PersistAsync(entry);
+            var entry = await _persister.RestoreAsync();
+            if (entry != null && entry.SessionId != Session.SessionId)
+            {
+                State = StateFactory.Create(entry.StateId, entry.Data);
+                RaiseAllCanExecute();
+                RaiseAllPropertyChanged();
+            }
         }
     }
 

@@ -18,7 +18,7 @@ namespace InOutLog.Core
             get
             {
                 string mode = _persister.IsLocalMode ? "local" : "remote";
-                return string.Format("In/Out Log - {0} ({1} mode)", DateTime.UtcNow.ToString(Entry.TodayDateFormat), mode);
+                return string.Format("In/Out Log - {0} ({1} mode)", Entry.GetDisplayDate(), mode);
             }
         }
 
@@ -54,27 +54,17 @@ namespace InOutLog.Core
                 {
                     _syncCounter++;
 
-                    var refreshInterval = await Config.GetRefreshIntervalAsync();
+                    var interval = await Config.GetRefreshIntervalAsync();
 
-                    if (_syncCounter > 0 && _syncCounter % refreshInterval == 0)
+                    if (_syncCounter > 0 && _syncCounter % interval.Seconds == 0)
                     {
-                        await Sync();
+                        await Watcher.SyncEntry();
                     }
 
                     RaiseAllPropertyChanged();
                 }));
             }, 
             null, 0, 1000);
-        }
-
-        private async Task Sync()
-        {
-            Entry entry = await _persister.RestoreAsync();
-            if (entry != null && entry.SessionId != Session.SessionId)
-            {
-                var state = StateFactory.Create(entry.StateId, entry.Data);
-                Watcher.ChangeState(() => state);
-            }
         }
 
         #region [ IDisposable ]
