@@ -24,6 +24,13 @@ namespace InOutLog.Core
 
         public override IWatcherState Reset()
         {
+            var dialog = Externals.Resolve<IDialog>();
+            var isConfirmed = dialog.Option("Alert", "Discard today's log?");
+            if (!isConfirmed)
+            {
+                return this;
+            }
+
             Data.StartedAt = null;
             Data.StoppedAt = null;
             Data.BreakStartedAt = null;

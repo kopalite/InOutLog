@@ -58,7 +58,7 @@ namespace InOutLog.Core
 
                     if (_syncCounter > 0 && _syncCounter % interval.Seconds == 0)
                     {
-                        await Watcher.SyncEntry();
+                        await Watcher.RestoreStateAsync();
                     }
 
                     RaiseAllPropertyChanged();

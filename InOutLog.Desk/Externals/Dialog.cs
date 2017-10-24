@@ -9,5 +9,11 @@ namespace InOutLog.Desk
         {
             MessageBox.Show(message, title);
         }
+
+        public bool Option(string title, string message)
+        {
+            var answer = MessageBox.Show(message, title, MessageBoxButton.YesNo);
+            return answer == MessageBoxResult.Yes;
+        }
     }
 }

@@ -3,5 +3,7 @@
     public interface IDialog
     {
         void Alert(string title, string message);
+
+        bool Option(string title, string message);
     }
 }

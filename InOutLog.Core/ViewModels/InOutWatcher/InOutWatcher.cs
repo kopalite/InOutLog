@@ -87,7 +87,7 @@ namespace InOutLog.Core
             await _persister.PersistAsync(entry);
         }
 
-        internal async Task SyncEntry()
+        internal async Task RestoreStateAsync()
         {
             var entry = await _persister.RestoreAsync();
             if (entry != null && entry.SessionId != Session.SessionId)
