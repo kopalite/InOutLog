@@ -59,7 +59,8 @@ namespace InOutLog.Core
 
         public async Task Reset()
         {
-            await ChangeStateAsync(() => State.Reset());
+            var state = await State.ResetAsync();
+            await ChangeStateAsync(() => state);
         }
 
         public bool CanReset

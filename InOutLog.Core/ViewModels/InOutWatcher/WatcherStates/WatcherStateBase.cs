@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace InOutLog.Core
 {
@@ -55,7 +56,7 @@ namespace InOutLog.Core
             get { return false; }
         }
 
-        public virtual IWatcherState Reset()
+        public virtual async Task<IWatcherState> ResetAsync()
         {
             return this;
         }

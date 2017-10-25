@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -46,6 +47,7 @@ namespace InOutLog.Core
 
         public MainViewModel()
         {
+            
             _persister = PersisterFactory.Create();
             _refresher = new Timer(x =>
             {
@@ -56,7 +58,7 @@ namespace InOutLog.Core
 
                     var interval = await Config.GetRefreshIntervalAsync();
 
-                    if (_syncCounter > 0 && _syncCounter % interval.Seconds == 0)
+                    if (Watcher != null && _syncCounter > 0 && _syncCounter % interval.Seconds == 0)
                     {
                         await Watcher.RestoreStateAsync();
                     }
@@ -98,10 +100,10 @@ namespace InOutLog.Core
         private ICommand _initCommand;
         public ICommand InitCommand
         {
-            get { return _initCommand ?? (_initCommand = RegisterCommand(new RelayCommand(async x => await Init(), x => true))); }
+            get { return _initCommand ?? (_initCommand = RegisterCommand(new RelayCommand(async x => await InitAsync(), x => true))); }
         }
 
-        private async Task Init()
+        public async Task InitAsync()
         {
             var entry = await _persister.RestoreAsync();
             var state = entry == null ? StateFactory.Create() : StateFactory.Create(entry.StateId, entry.Data);

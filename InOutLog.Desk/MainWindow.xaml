@@ -29,7 +29,6 @@
         <local:ClockConverter x:Key="ClockConverter" />
         <local:TimeSpanConverter x:Key="SpanConverter" />
         <local:VisibilityInverter x:Key="VisibilityInverter" />
-        <local:MultiVisibilityConverter x:Key="VisibilityConjuctionConverter" IsConjuction="true" />
         <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
 
         <Style x:Key="TextClock" TargetType="{x:Type TextBlock}">
@@ -173,7 +172,8 @@
                 Grid.Row="6"
                 Grid.Column="1"
                 Grid.ColumnSpan="2"
-                HorizontalAlignment="Left" VerticalAlignment="Center"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
                 Text="-------------------------------------" />
 
             <!--  reset  -->

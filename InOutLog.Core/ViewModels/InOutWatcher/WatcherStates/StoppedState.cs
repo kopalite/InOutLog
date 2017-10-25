@@ -22,10 +22,13 @@ namespace InOutLog.Core
             get { return true; }
         }
 
-        public override IWatcherState Reset()
+        public override async Task<IWatcherState> ResetAsync()
         {
             var dialog = Externals.Resolve<IDialog>();
-            var isConfirmed = dialog.Option("Alert", "Discard today's log?");
+            var isConfirmed = false;
+            await dialog.OptionAsync("Alert", "Discard today's log?", 
+                                      () => { isConfirmed = true; }, 
+                                      () => { isConfirmed = false; });
             if (!isConfirmed)
             {
                 return this;

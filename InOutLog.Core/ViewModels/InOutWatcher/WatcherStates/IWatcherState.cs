@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace InOutLog.Core
 {
@@ -20,7 +21,7 @@ namespace InOutLog.Core
         IWatcherState BreakOut();
         bool CanBreakOut { get; }
 
-        IWatcherState Reset();
+        Task<IWatcherState> ResetAsync();
         bool CanReset { get; }
 
         TimeSpan GetCheckInTime();

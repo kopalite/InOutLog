@@ -1,5 +1,7 @@
 ﻿using InOutLog.Core;
 using System.Windows;
+using System;
+using System.Threading.Tasks;
 
 namespace InOutLog.Desk
 {
@@ -10,10 +12,19 @@ namespace InOutLog.Desk
             MessageBox.Show(message, title);
         }
 
-        public bool Option(string title, string message)
+        public async Task OptionAsync(string title, string message, Action yesAction, Action noAction)
         {
             var answer = MessageBox.Show(message, title, MessageBoxButton.YesNo);
-            return answer == MessageBoxResult.Yes;
+            if (answer == MessageBoxResult.Yes)
+            {
+                yesAction();
+            }
+            else
+            {
+                noAction();
+            }
+
+            await Task.FromResult<object>(null);
         }
     }
 }

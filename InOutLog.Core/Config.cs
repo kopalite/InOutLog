@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Android.App;
+using Newtonsoft.Json;
 using PCLStorage;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace InOutLog.Core
@@ -34,10 +36,19 @@ namespace InOutLog.Core
                 return;
             }
 
-            var configFile = await FileSystem.Current.GetFileFromPathAsync("config.json");
-            var content = await configFile.ReadAllTextAsync();
-            var settings = JsonConvert.DeserializeObject<ConfigSettings>(content);
-            _settings = settings;
+            _settings = new ConfigSettings
+            {
+                ApiUrl = "http://192.168.0.102:3000/",
+                RefreshInterval = 5,
+                Username = "ivan.kopcanski"
+            };
+
+            await Task.FromResult<object>(null);
+
+            //var configFile = await FileSystem.Current.GetFileFromPathAsync(@"config.json");
+            //var content = await configFile.ReadAllTextAsync();
+            //var settings = JsonConvert.DeserializeObject<ConfigSettings>(content);
+            //_settings = settings;
             
         }
     }

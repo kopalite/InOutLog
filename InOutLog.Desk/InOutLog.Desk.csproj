@@ -73,10 +73,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Converters\MultiVisibilityConverter.cs" />
-    <Compile Include="Converters\TimeSpanConverter.cs" />
-    <Compile Include="Converters\ClockConverter.cs" />
-    <Compile Include="Converters\VisibilityInverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -87,6 +83,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\ClockConverter.cs" />
+    <Compile Include="Converters\TimeSpanConverter.cs" />
+    <Compile Include="Converters\VisibilityInverter.cs" />
     <Compile Include="Externals\Dialog.cs" />
     <Compile Include="Externals\SafeUI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

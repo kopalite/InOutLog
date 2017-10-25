@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:stretchColumns="*"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+<!--Title-->
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dip"
+        android:paddingLeft="20dip"
+        android:paddingBottom="5dip">
+        <TextView
+            android:id="@+id/TitleLabel"
+            android:text="2017-10-22 (local mode)"
+            android:layout_span="3"
+            android:gravity="left"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </TableRow>
+<!--Check-in-->
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dip"
+        android:paddingLeft="15dip"
+        android:paddingBottom="5dip">
+        <Button
+            android:id="@+id/CheckInButton"
+            android:layout_span="1"
+            android:layout_height="wrap_content"
+            android:text="Check In" />
+        <TextView
+            android:id="@+id/StartedAtLabel"
+            android:gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </TableRow>
+<!--Check-out-->
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dip"
+        android:paddingBottom="3dip">
+        <Button
+            android:id="@+id/CheckOutButton"
+            android:layout_span="1"
+            android:layout_height="wrap_content"
+            android:text="Check Out" />
+        <TextView
+            android:id="@+id/StoppedAtLabel"
+            android:gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView
+            android:id="@+id/CheckInTimeLabel"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </TableRow>
+<!--Break-in-->
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dip"
+        android:paddingLeft="15dip"
+        android:paddingBottom="5dip">
+        <Button
+            android:id="@+id/BreakInButton"
+            android:layout_span="1"
+            android:layout_height="wrap_content"
+            android:text="Break In" />
+        <TextView
+            android:id="@+id/BreakStartedAtLabel"
+            android:gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </TableRow>
+<!--Break-out-->
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dip"
+        android:paddingBottom="3dip">
+        <Button
+            android:id="@+id/BreakOutButton"
+            android:layout_span="1"
+            android:layout_height="wrap_content"
+            android:text="Break Out" />
+        <TextView
+            android:id="@+id/BreakStoppedAtLabel"
+            android:gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView
+            android:id="@+id/BreakInTimeLabel"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </TableRow>
+<!--Reset-->
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dip"
+        android:paddingLeft="15dip"
+        android:paddingBottom="5dip">
+        <Button
+            android:id="@+id/ResetButton"
+            android:layout_span="1"
+            android:layout_height="wrap_content"
+            android:text="Reset" />
+        <TextView
+            android:id="@+id/TotalLabel"
+            android:text="TOTAL"
+            android:gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView
+            android:id="@+id/WorkingTimeLabel"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </TableRow>
+</TableLayout>

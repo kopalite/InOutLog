@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Globalization;
-using System.Windows.Data;
 using InOutLog.Core;
 
-namespace InOutLog.Desk
+namespace InOutLog.Droid
 {
-    public class ClockConverter : IValueConverter
+    public class ClockConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value)
         {
             var dateTime = value as DateTime?;
             if (dateTime == null || !dateTime.HasValue)
@@ -17,11 +15,6 @@ namespace InOutLog.Desk
 
             dateTime = dateTime.GetValueOrDefault().ToLocalTime(); 
             return string.Format("{0}:{1}:{2}", dateTime.Value.Hour.PadLeft02(), dateTime.Value.Minute.PadLeft02(), dateTime.Value.Second.PadLeft02());
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
         }
     }
 }

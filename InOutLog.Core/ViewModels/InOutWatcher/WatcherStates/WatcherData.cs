@@ -93,8 +93,6 @@ namespace InOutLog.Core
 
         #region [ ctor, refresh, state ]
 
-        
-
         private IWatcherState _state;
 
         public WatcherData()
@@ -110,6 +108,7 @@ namespace InOutLog.Core
         public void SetState(IWatcherState state)
         {
             _state = state;
+            RaiseAllPropertyChanged();
         }
 
         #endregion
