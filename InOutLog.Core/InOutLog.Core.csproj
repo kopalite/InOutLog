@@ -36,10 +36,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Config.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Externals\Externals.cs" />
+    <Compile Include="Externals\IConfig.cs" />
     <Compile Include="Externals\IDialog.cs" />
     <Compile Include="Externals\ISafeUI.cs" />
     <Compile Include="Persisters\ILogPersister.cs" />
@@ -64,10 +64,6 @@
     <Compile Include="[mvvm]\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config.json">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>

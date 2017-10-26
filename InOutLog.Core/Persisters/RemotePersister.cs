@@ -12,15 +12,17 @@ namespace InOutLog.Core
 {
     public class RemotePersister : ILogPersister
     {
-        private readonly ILogPersister _fallbackPersister;
+        private IConfig _config;
 
+        private readonly ILogPersister _fallbackPersister;
 
         public bool IsLocalMode { get; private set; }
 
         public RemotePersister(ILogPersister fallbackPersister)
         {
-            IsLocalMode = false;
+            _config = Externals.Resolve<IConfig>();
             _fallbackPersister = fallbackPersister;
+            IsLocalMode = false;
         }
 
         public async Task<Entry> RestoreAsync()
@@ -33,7 +35,7 @@ namespace InOutLog.Core
             try
             {
                 var client = await GetClientAsync();
-                var username = await Config.GetUsernameAsync();
+                var username = await _config.GetUsernameAsync();
                 var entryDate = Entry.GetEntryDate();
                 var url = string.Format("/api/entries/find/{0}/{1}", username, entryDate);
                 var response = await client.GetAsync(url);
@@ -106,7 +108,7 @@ namespace InOutLog.Core
             try
             {
                 var client = await GetClientAsync();
-                var username = await Config.GetUsernameAsync();
+                var username = await _config.GetUsernameAsync();
                 var entryDate = Entry.GetEntryDate();
                 var url = string.Format("/api/entries/{0}/{1}", username, entryDate);
                 var response = await client.DeleteAsync(url);
@@ -129,7 +131,7 @@ namespace InOutLog.Core
 
         private async Task<HttpClient> GetClientAsync()
         {
-            var address = await Config.GetApiUrlAsync();
+            var address = await _config.GetApiUrlAsync();
             var client = new HttpClient();
             client.BaseAddress = new Uri(address);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

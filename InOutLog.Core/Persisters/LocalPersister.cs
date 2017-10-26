@@ -11,7 +11,14 @@ namespace InOutLog.Core
     {
         private const string FileName = "inoutlog.json";
 
+        private IConfig _config;
+
         public bool IsLocalMode { get { return true; } }
+
+        public LocalPersister()
+        {
+            _config = Externals.Resolve<IConfig>();
+        }
 
         private class Log
         {
@@ -34,7 +41,7 @@ namespace InOutLog.Core
             var file = await folder.CreateFileAsync(FileName, CreationCollisionOption.OpenIfExists);
             var content = await file.ReadAllTextAsync();
             var log = JsonConvert.DeserializeObject<Log>(content);
-            var username = await Config.GetUsernameAsync();
+            var username = await _config.GetUsernameAsync();
             return log.Entries.FirstOrDefault(x => x.Username == username && x.EntryDate == Entry.GetEntryDate());
 
         }
@@ -57,7 +64,7 @@ namespace InOutLog.Core
                 log = JsonConvert.DeserializeObject<Log>(content);
             }
 
-            var username = await Config.GetUsernameAsync();
+            var username = await _config.GetUsernameAsync();
             var existingEntry = log.Entries.FirstOrDefault(x => x.Username == username && x.EntryDate == Entry.GetEntryDate());
             if (existingEntry != null)
             {
@@ -90,7 +97,7 @@ namespace InOutLog.Core
                 return;
             }
 
-            var username = await Config.GetUsernameAsync();
+            var username = await _config.GetUsernameAsync();
             var existingEntry = log.Entries.FirstOrDefault(x => x.Username == username && x.EntryDate == Entry.GetEntryDate());
             if (existingEntry != null)
             {

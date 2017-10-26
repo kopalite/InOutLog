@@ -7,9 +7,10 @@ namespace InOutLog.Desk
 {
     internal class Dialog : IDialog
     {
-        public void Alert(string title, string message)
+        public async Task AlertAsync(string title, string message)
         {
             MessageBox.Show(message, title);
+            await Task.FromResult<object>(null);
         }
 
         public async Task OptionAsync(string title, string message, Action yesAction, Action noAction)

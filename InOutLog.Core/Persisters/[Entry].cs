@@ -26,12 +26,14 @@ namespace InOutLog.Core
 
         internal static async Task<Entry> CreateAsync(int stateId, WatcherData data)
         {
+            var config = Externals.Resolve<IConfig>();
+
             return new Entry
             {
                 SessionId = Session.SessionId,
                 Timestamp = DateTime.UtcNow,
                 EntryDate = GetEntryDate(),
-                Username = await Config.GetUsernameAsync(),
+                Username = await config.GetUsernameAsync(),
                 StateId = stateId,
                 Data = data 
             };

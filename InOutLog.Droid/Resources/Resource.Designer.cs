@@ -26,6 +26,8 @@ namespace InOutLog.Droid
 		
 		public static void UpdateIdValues()
 		{
+			global::PCLAppConfig.FileSystemStream.Android.Resource.String.ApplicationName = global::InOutLog.Droid.Resource.String.ApplicationName;
+			global::PCLAppConfig.FileSystemStream.Android.Resource.String.Hello = global::InOutLog.Droid.Resource.String.Hello;
 			global::PCLStorage.Resource.String.ApplicationName = global::InOutLog.Droid.Resource.String.ApplicationName;
 			global::PCLStorage.Resource.String.Hello = global::InOutLog.Droid.Resource.String.Hello;
 		}

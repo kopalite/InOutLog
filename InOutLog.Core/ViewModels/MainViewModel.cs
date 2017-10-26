@@ -10,6 +10,7 @@ namespace InOutLog.Core
 {
     public partial class MainViewModel : ViewModelBase
     {
+        private IConfig _config;
         private ILogPersister _persister;
         private Timer _refresher;
         private int _syncCounter;
@@ -47,7 +48,7 @@ namespace InOutLog.Core
 
         public MainViewModel()
         {
-            
+            _config = Externals.Resolve<IConfig>();   
             _persister = PersisterFactory.Create();
             _refresher = new Timer(x =>
             {
@@ -56,7 +57,7 @@ namespace InOutLog.Core
                 {
                     _syncCounter++;
 
-                    var interval = await Config.GetRefreshIntervalAsync();
+                    var interval = await _config.GetRefreshIntervalAsync();
 
                     if (Watcher != null && _syncCounter > 0 && _syncCounter % interval.Seconds == 0)
                     {

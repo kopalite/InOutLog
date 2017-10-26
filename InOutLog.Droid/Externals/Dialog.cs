@@ -15,13 +15,17 @@ namespace InOutLog.Droid
             _context = context;
         }
 
-        public void Alert(string title, string message)
+        public async Task AlertAsync(string title, string message)
         {
+            TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
+
             var alert = new AlertDialog.Builder(_context);
             alert.SetTitle(title);
             alert.SetMessage(message);
-            alert.SetPositiveButton("OK", (obj, args) => {});
+            alert.SetPositiveButton("OK", (obj, args) => { tcs.SetResult(null); });
             alert.Create().Show();
+
+            await tcs.Task;
         }
 
         public async Task OptionAsync(string title, string message, Action yesAction, Action noAction)

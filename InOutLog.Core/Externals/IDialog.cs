@@ -5,7 +5,7 @@ namespace InOutLog.Core
 {
     public interface IDialog
     {
-        void Alert(string title, string message);
+        Task AlertAsync(string title, string message);
 
         Task OptionAsync(string title, string message, Action yesAction, Action noAction);
     }

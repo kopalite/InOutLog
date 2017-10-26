@@ -12,16 +12,14 @@ namespace InOutLog.Droid
     {
         private MainViewModel _mainViewModel;
         
-        public MainActivity()
-        {
-            Core.Externals.Register<ISafeUI>(() => new SafeUI());
-            Core.Externals.Register<IDialog>(() => new Dialog(this));
-        }
-
         protected override async void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            
+
+            Core.Externals.Register<IConfig>(() => new Config());
+            Core.Externals.Register<ISafeUI>(() => new SafeUI());
+            Core.Externals.Register<IDialog>(() => new Dialog(this));
+
             SetContentView(Resource.Layout.Main);
 
             _mainViewModel = new MainViewModel();
