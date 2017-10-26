@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InOutLog.Core", "InOutLog.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InOutLog.Droid", "InOutLog.Droid\InOutLog.Droid.csproj", "{2C957098-1DEB-4F78-B2A7-5E1A024E8044}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "InOutLog.Setup", "InOutLog.Setup\InOutLog.Setup.vdproj", "{733EA8C9-CA36-44E3-BD77-D4957E4B3BDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,8 @@ Global
 		{2C957098-1DEB-4F78-B2A7-5E1A024E8044}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C957098-1DEB-4F78-B2A7-5E1A024E8044}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2C957098-1DEB-4F78-B2A7-5E1A024E8044}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{733EA8C9-CA36-44E3-BD77-D4957E4B3BDD}.Debug|Any CPU.ActiveCfg = Debug
+		{733EA8C9-CA36-44E3-BD77-D4957E4B3BDD}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
