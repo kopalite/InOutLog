@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using InOutLog.Core;
+using System.Windows.Controls;
 
 namespace InOutLog.Desk
 {
@@ -9,7 +10,6 @@ namespace InOutLog.Desk
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            
             if (value == null || !(value is TimeSpan))
             {
                 return "00:00:00";

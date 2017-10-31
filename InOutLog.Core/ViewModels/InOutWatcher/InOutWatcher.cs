@@ -103,6 +103,8 @@ namespace InOutLog.Core
 
     public partial class InOutWatcher
     {
+        private bool _isInitialized;
+
         private ICommand _startupCommand;
         public ICommand StartupCommand
         {
@@ -115,6 +117,11 @@ namespace InOutLog.Core
 
         public async Task StartupAsync()
         {
+            if (_isInitialized)
+            {
+                return;
+            }
+
             ScreenViewModel.ChangeScreen(Screen.Busy);
 
             var entry = await _persister.RestoreAsync();
@@ -122,6 +129,8 @@ namespace InOutLog.Core
             State = state;
 
             ScreenViewModel.ChangeScreen(Screen.Ready);
+
+            _isInitialized = true;
         }
 
         private RelayCommand _checkInCommand;

@@ -5,6 +5,7 @@
     xmlns:core="clr-namespace:InOutLog.Core;assembly=InOutLog.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:local="clr-namespace:InOutLog.Desk"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="{Binding Title}"
@@ -163,16 +164,16 @@
 
         <!--  Commands & Watchers  -->
 
-        <Grid
+        <Grid x:Name="WatcherGrid"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Background="White"
+            Background="White" 
             Visibility="{Binding ScreenViewModel.IsReady, Converter={StaticResource VisibilityConverter}}">
 
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="IsVisibleChanged" >
+                <ei:PropertyChangedTrigger Binding="{Binding Visibility, ElementName=WatcherGrid}">
                     <i:InvokeCommandAction Command="{Binding Path=Watcher.StartupCommand, Mode=OneWay}" />
-                </i:EventTrigger>
+                </ei:PropertyChangedTrigger>
             </i:Interaction.Triggers>
 
             <Grid.RowDefinitions>

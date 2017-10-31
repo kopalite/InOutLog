@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace InOutLog.Core
 {
     public partial class AuthViewModel : ViewModelBase
     {
-        private IAuthManager _authManager;
+        private IAuthManager _authManager;        
 
         private string _username;
         public string Username
