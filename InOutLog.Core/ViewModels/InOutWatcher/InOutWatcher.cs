@@ -10,7 +10,7 @@ namespace InOutLog.Core
         private IConfig _config;
         private ILogPersister _persister;
 
-        public IWatcherState State { get; private set; }
+        public IWatcherState State { get; private set; }        
 
         public InOutWatcher(ILogPersister persister)
         {
@@ -111,26 +111,25 @@ namespace InOutLog.Core
             get
             {
                 return _startupCommand ??
-                  (_startupCommand = RegisterCommand(new RelayCommand(async x => await StartupAsync(), x => true)));
+                  (_startupCommand = RegisterCommand(new RelayCommand(async x => 
+                  {
+                      if (_isInitialized) return;
+                      await StartupAsync();
+                      _isInitialized = true;
+                  }, x => true)));
             }
         }
 
         public async Task StartupAsync()
         {
-            if (_isInitialized)
-            {
-                return;
-            }
-
             ScreenViewModel.ChangeScreen(Screen.Busy);
 
             var entry = await _persister.RestoreAsync();
-            var state = entry == null ? StateFactory.Create() : StateFactory.Create(entry.StateId, entry.Data);
-            State = state;
+            State = entry == null ? StateFactory.Create() : StateFactory.Create(entry.StateId, entry.Data);
+            RaiseAllCanExecute();
+            RaiseAllPropertyChanged();
 
             ScreenViewModel.ChangeScreen(Screen.Ready);
-
-            _isInitialized = true;
         }
 
         private RelayCommand _checkInCommand;

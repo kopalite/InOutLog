@@ -10,20 +10,20 @@ namespace InOutLog.Core
     {
         public async Task<AuthData> SignUpUserAsync(string username, string password)
         {
-            await Task.Delay(5000);
+            await Task.Delay(1000);
             return new AuthData(username);
             
         }
 
         public async Task<AuthData> SignInUserAsync(string username, string password)
         {
-            await Task.Delay(5000);
+            await Task.Delay(1000);
             return new AuthData(username);
         }
 
         public async Task<AuthData> SignInUserAsync()
         {
-            await Task.Delay(5000);
+            await Task.Delay(1000);
             return new AuthData("ivan.kopcanski");
         }
 
