@@ -58,6 +58,7 @@ namespace InOutLog.Core
 
         public virtual async Task<IWatcherState> ResetAsync()
         {
+            await Task.FromResult<object>(null);
             return this;
         }
 

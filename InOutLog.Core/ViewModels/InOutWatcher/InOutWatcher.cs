@@ -8,16 +8,14 @@ namespace InOutLog.Core
     public partial class InOutWatcher : ViewModelBase
     {
         private IConfig _config;
-
         private ILogPersister _persister;
 
         public IWatcherState State { get; private set; }
 
-        public InOutWatcher(ILogPersister persister, IWatcherState state)
+        public InOutWatcher(ILogPersister persister)
         {
             _config = Externals.Resolve<IConfig>();
             _persister = persister;
-            State = state; 
         }
 
         public async Task CheckIn()
@@ -27,7 +25,7 @@ namespace InOutLog.Core
 
         public bool CanCheckIn
         {
-            get { return State.CanCheckIn; }
+            get { return State != null && State.CanCheckIn; }
         }
 
         public async Task CheckOut()
@@ -37,7 +35,7 @@ namespace InOutLog.Core
 
         public bool CanCheckOut
         {
-            get { return State.CanCheckOut; }
+            get { return State != null && State.CanCheckOut; }
         }
 
         public async Task BreakIn()
@@ -47,7 +45,7 @@ namespace InOutLog.Core
 
         public bool CanBreakIn
         {
-            get { return State.CanBreakIn; }
+            get { return State != null && State.CanBreakIn; }
         }
 
         public async Task BreakOut()
@@ -57,7 +55,7 @@ namespace InOutLog.Core
 
         public bool CanBreakOut
         {
-            get { return State.CanBreakOut; }
+            get { return State != null && State.CanBreakOut; }
         }
 
         public async Task Reset()
@@ -68,7 +66,7 @@ namespace InOutLog.Core
 
         public bool CanReset
         {
-            get { return State.CanReset; }
+            get { return State != null && State.CanReset; }
         }
 
 
@@ -105,6 +103,27 @@ namespace InOutLog.Core
 
     public partial class InOutWatcher
     {
+        private ICommand _startupCommand;
+        public ICommand StartupCommand
+        {
+            get
+            {
+                return _startupCommand ??
+                  (_startupCommand = RegisterCommand(new RelayCommand(async x => await StartupAsync(), x => true)));
+            }
+        }
+
+        public async Task StartupAsync()
+        {
+            ScreenViewModel.ChangeScreen(Screen.Busy);
+
+            var entry = await _persister.RestoreAsync();
+            var state = entry == null ? StateFactory.Create() : StateFactory.Create(entry.StateId, entry.Data);
+            State = state;
+
+            ScreenViewModel.ChangeScreen(Screen.Ready);
+        }
+
         private RelayCommand _checkInCommand;
         public ICommand CheckInCommand
         {

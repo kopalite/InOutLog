@@ -11,6 +11,7 @@ namespace InOutLog.Core
     public partial class MainViewModel : ViewModelBase
     {
         private IConfig _config;
+        private IAuthManager _authManager;
         private ILogPersister _persister;
         private Timer _refresher;
         private int _syncCounter;
@@ -24,6 +25,28 @@ namespace InOutLog.Core
             }
         }
 
+        private AuthViewModel _authViewModel;
+        public AuthViewModel AuthViewModel
+        {
+            get { return _authViewModel; }
+            private set
+            {
+                _authViewModel = value;
+                NotifyPropertyChanged(() => AuthViewModel);
+            }
+        }
+
+        private ScreenViewModel _screenViewModel;
+        public ScreenViewModel ScreenViewModel
+        {
+            get { return _screenViewModel; }
+            private set
+            {
+                _screenViewModel = value;
+                NotifyPropertyChanged(() => ScreenViewModel);
+            }
+        }
+
         private InOutWatcher _watcher;
         public InOutWatcher Watcher
         {
@@ -34,32 +57,27 @@ namespace InOutLog.Core
                 NotifyPropertyChanged(() => Watcher);
             }
         }
-
-        private bool _isInitialized;
-        public bool IsInitialized
-        {
-            get { return _isInitialized && Watcher != null; }
-            private set
-            {
-                _isInitialized = value;
-                NotifyPropertyChanged(() => IsInitialized);
-            }
-        }
-
+        
         public MainViewModel()
         {
-            _config = Externals.Resolve<IConfig>();   
+            _config = Externals.Resolve<IConfig>();
+            _authManager = Internals.Resolve<IAuthManager>();
             _persister = PersisterFactory.Create();
             _refresher = new Timer(x =>
             {
                 var safeUI = Externals.Resolve<ISafeUI>();
                 safeUI.Invoke(new Action(async () =>
                 {
+                    if (!ScreenViewModel.IsReady)
+                    {
+                        return;
+                    }
+
                     _syncCounter++;
 
                     var interval = await _config.GetRefreshIntervalAsync();
 
-                    if (Watcher != null && _syncCounter > 0 && _syncCounter % interval.Seconds == 0)
+                    if (_syncCounter > 0 && _syncCounter % interval.Seconds == 0)
                     {
                         await Watcher.RestoreStateAsync();
                     }
@@ -68,6 +86,10 @@ namespace InOutLog.Core
                 }));
             }, 
             null, 0, 1000);
+
+            AuthViewModel = new AuthViewModel(_authManager);
+            ScreenViewModel = new ScreenViewModel();
+            Watcher = new InOutWatcher(_persister);
         }
 
         #region [ IDisposable ]
@@ -94,22 +116,5 @@ namespace InOutLog.Core
         }
 
         #endregion
-    }
-
-    public partial class MainViewModel
-    {
-        private ICommand _initCommand;
-        public ICommand InitCommand
-        {
-            get { return _initCommand ?? (_initCommand = RegisterCommand(new RelayCommand(async x => await InitAsync(), x => true))); }
-        }
-
-        public async Task InitAsync()
-        {
-            var entry = await _persister.RestoreAsync();
-            var state = entry == null ? StateFactory.Create() : StateFactory.Create(entry.StateId, entry.Data);
-            Watcher = new InOutWatcher(_persister, state);
-            IsInitialized = true;
-        } 
     }
 }

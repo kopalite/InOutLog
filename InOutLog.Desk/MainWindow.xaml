@@ -19,12 +19,6 @@
         <core:MainViewModel />
     </Window.DataContext>
 
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding Path=InitCommand, Mode=OneWay}" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
-
     <Window.Resources>
         <local:ClockConverter x:Key="ClockConverter" />
         <local:TimeSpanConverter x:Key="SpanConverter" />
@@ -36,9 +30,120 @@
             <Setter Property="FontSize" Value="26" />
             <Setter Property="Margin" Value="0,5,0,0" />
         </Style>
+
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Margin" Value="0,5,0,0" />
+        </Style>
+
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Padding" Value="3,4,0,0" />
+            <Setter Property="Margin" Value="0,5,0,0" />
+        </Style>
+
+        <Style TargetType="{x:Type PasswordBox}">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Padding" Value="3,4,0,0" />
+            <Setter Property="Margin" Value="0,5,0,0" />
+        </Style>
+
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Margin" Value="0,5,0,0" />
+        </Style>
+
     </Window.Resources>
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+        <!--  OAuth panel  -->
+
+        <Grid
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="White"
+            Visibility="{Binding ScreenViewModel.IsAuth, Converter={StaticResource VisibilityConverter}}">
+
+            <Grid.RowDefinitions>
+                <!--  divider  -->
+                <RowDefinition Height="55" />
+                <!--  username  -->
+                <RowDefinition Height="35" />
+                <!--  password  -->
+                <RowDefinition Height="35" />
+                <!--  sign in  -->
+                <RowDefinition Height="35" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <!--  labels  -->
+                <ColumnDefinition Width=".35*" />
+                <!--  divider  -->
+                <ColumnDefinition Width="10" />
+                <!--  inputs & buttons  -->
+                <ColumnDefinition Width=".65*" />
+                <!--  divider  -->
+                <ColumnDefinition Width="20" />
+            </Grid.ColumnDefinitions>
+
+            <!--  username label & input  -->
+
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Text="Username:" />
+
+            <TextBox
+                Grid.Row="1"
+                Grid.Column="2"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Text="{Binding AuthViewModel.Username}" />
+
+            <!--  password label & input  -->
+
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Text="Password:" />
+
+            <PasswordBox
+                Grid.Row="2"
+                Grid.Column="2"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center" />
+
+            <!--  sign in / sign up buttons  -->
+
+            <Button
+                Grid.Row="3"
+                Grid.Column="2"
+                Width="80"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Command="{Binding AuthViewModel.SignInCommand}">
+                Sign in
+            </Button>
+
+            <Button
+                Grid.Row="3"
+                Grid.Column="2"
+                Width="80"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Command="{Binding AuthViewModel.SignUpCommand}">
+                Sign up
+            </Button>
+
+        </Grid>
 
         <!--  'Please wait' splash  -->
 
@@ -46,7 +151,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Background="White"
-            Visibility="{Binding IsInitialized, Converter={StaticResource VisibilityInverter}}">
+            Visibility="{Binding ScreenViewModel.IsBusy, Converter={StaticResource VisibilityConverter}}">
 
             <TextBlock
                 HorizontalAlignment="Center"
@@ -62,7 +167,13 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Background="White"
-            Visibility="{Binding IsInitialized, Converter={StaticResource VisibilityConverter}}">
+            Visibility="{Binding ScreenViewModel.IsReady, Converter={StaticResource VisibilityConverter}}">
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="IsVisibleChanged" >
+                    <i:InvokeCommandAction Command="{Binding Path=Watcher.StartupCommand, Mode=OneWay}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
 
             <Grid.RowDefinitions>
                 <!--  divider  -->
@@ -98,7 +209,6 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 Width="70"
-                Height="30"
                 Command="{Binding Watcher.CheckInCommand}">
                 Check in
             </Button>
@@ -114,7 +224,6 @@
                 Grid.Row="2"
                 Grid.Column="0"
                 Width="70"
-                Height="30"
                 Command="{Binding Watcher.CheckOutCommand}">
                 Check out
             </Button>
@@ -135,7 +244,6 @@
                 Grid.Row="4"
                 Grid.Column="0"
                 Width="70"
-                Height="30"
                 Command="{Binding Watcher.BreakInCommand}">
                 Break in
             </Button>
@@ -151,7 +259,6 @@
                 Grid.Row="5"
                 Grid.Column="0"
                 Width="70"
-                Height="30"
                 Command="{Binding Watcher.BreakOutCommand}">
                 Break out
             </Button>
@@ -174,7 +281,7 @@
                 Grid.ColumnSpan="2"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                Text="-------------------------------------" />
+                Text="-----------------------------------" />
 
             <!--  reset  -->
 
@@ -182,7 +289,6 @@
                 Grid.Row="7"
                 Grid.Column="0"
                 Width="70"
-                Height="30"
                 Command="{Binding Watcher.ResetCommand}">
                 Reset
             </Button>

@@ -1,5 +1,6 @@
 ﻿using System;
 using InOutLog.Core;
+using Android.App;
 
 namespace InOutLog.Droid
 {

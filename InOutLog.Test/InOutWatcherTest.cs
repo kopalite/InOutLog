@@ -16,7 +16,7 @@ namespace InOutLog.Test
             var state = new IdleState(data);
             var persisterMock = (new Moq.Mock<ILogPersister>()).Object;
             var dialogMock = (new Moq.Mock<IDialog>()).Object;
-            _watcher = new InOutWatcher(persisterMock, state);
+            _watcher = new InOutWatcher(persisterMock);
         }
 
         [TestMethod]

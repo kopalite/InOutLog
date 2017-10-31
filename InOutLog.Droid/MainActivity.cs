@@ -16,14 +16,14 @@ namespace InOutLog.Droid
         {
             base.OnCreate(bundle);
 
-            Core.Externals.Register<IConfig>(() => new Config());
+            Core.Externals.Register<IConfig>(() => new Config(this));
             Core.Externals.Register<ISafeUI>(() => new SafeUI());
             Core.Externals.Register<IDialog>(() => new Dialog(this));
 
             SetContentView(Resource.Layout.Main);
 
             _mainViewModel = new MainViewModel();
-            await _mainViewModel.InitAsync();
+            await _mainViewModel.Watcher.StartupAsync();
 
             //commands setting
 
