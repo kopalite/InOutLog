@@ -11,13 +11,13 @@ namespace InOutLog.Core
     {
         private const string FileName = "inoutlog.json";
 
-        private IConfig _config;
+        private IAuthManager _authManager;
 
         public bool IsLocalMode { get { return true; } }
 
         public LocalPersister()
         {
-            _config = Externals.Resolve<IConfig>();
+            _authManager = Internals.Resolve<IAuthManager>();
         }
 
         private class Log
@@ -41,7 +41,7 @@ namespace InOutLog.Core
             var file = await folder.CreateFileAsync(FileName, CreationCollisionOption.OpenIfExists);
             var content = await file.ReadAllTextAsync();
             var log = JsonConvert.DeserializeObject<Log>(content);
-            var username = await _config.GetUsernameAsync();
+            var username = (await _authManager.GetAuthDataAsync()).Username;
             return log.Entries.FirstOrDefault(x => x.Username == username && x.EntryDate == Entry.GetEntryDate());
 
         }
@@ -64,7 +64,7 @@ namespace InOutLog.Core
                 log = JsonConvert.DeserializeObject<Log>(content);
             }
 
-            var username = await _config.GetUsernameAsync();
+            var username = (await _authManager.GetAuthDataAsync()).Username;
             var existingEntry = log.Entries.FirstOrDefault(x => x.Username == username && x.EntryDate == Entry.GetEntryDate());
             if (existingEntry != null)
             {
@@ -97,7 +97,7 @@ namespace InOutLog.Core
                 return;
             }
 
-            var username = await _config.GetUsernameAsync();
+            var username = (await _authManager.GetAuthDataAsync()).Username;
             var existingEntry = log.Entries.FirstOrDefault(x => x.Username == username && x.EntryDate == Entry.GetEntryDate());
             if (existingEntry != null)
             {

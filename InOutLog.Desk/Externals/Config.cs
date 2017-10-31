@@ -10,6 +10,12 @@ namespace InOutLog.Desk
 {
     internal class Config : IConfig
     {
+        public async Task<string> GetAuthUrlAsync()
+        {
+            var result = ConfigurationManager.AppSettings["authUrl"];
+            return await Task.FromResult(result);
+        }
+
         public async Task<string> GetApiUrlAsync()
         {
             var result = ConfigurationManager.AppSettings["apiUrl"];
@@ -20,12 +26,6 @@ namespace InOutLog.Desk
         {
             var result = int.Parse(ConfigurationManager.AppSettings["refreshInterval"]);
             return await Task.FromResult(TimeSpan.FromSeconds(result));
-        }
-
-        public async Task<string> GetUsernameAsync()
-        {
-            var result = ConfigurationManager.AppSettings["username"];
-            return await Task.FromResult(result);
         }
     }
 }

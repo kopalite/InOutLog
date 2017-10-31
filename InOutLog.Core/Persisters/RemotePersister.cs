@@ -12,7 +12,9 @@ namespace InOutLog.Core
 {
     public class RemotePersister : ILogPersister
     {
-        private IConfig _config;
+        private readonly IAuthManager _authManager;
+
+        private readonly IConfig _config;
 
         private readonly ILogPersister _fallbackPersister;
 
@@ -20,6 +22,7 @@ namespace InOutLog.Core
 
         public RemotePersister(ILogPersister fallbackPersister)
         {
+            _authManager = Internals.Resolve<IAuthManager>();
             _config = Externals.Resolve<IConfig>();
             _fallbackPersister = fallbackPersister;
             IsLocalMode = false;
@@ -35,7 +38,7 @@ namespace InOutLog.Core
             try
             {
                 var client = await GetClientAsync();
-                var username = await _config.GetUsernameAsync();
+                var username = (await _authManager.GetAuthDataAsync()).Username;
                 var entryDate = Entry.GetEntryDate();
                 var url = string.Format("/api/entries/find/{0}/{1}", username, entryDate);
                 var response = await client.GetAsync(url);
@@ -108,7 +111,7 @@ namespace InOutLog.Core
             try
             {
                 var client = await GetClientAsync();
-                var username = await _config.GetUsernameAsync();
+                var username = (await _authManager.GetAuthDataAsync()).Username;
                 var entryDate = Entry.GetEntryDate();
                 var url = string.Format("/api/entries/{0}/{1}", username, entryDate);
                 var response = await client.DeleteAsync(url);
