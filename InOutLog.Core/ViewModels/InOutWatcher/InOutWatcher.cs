@@ -7,6 +7,8 @@ namespace InOutLog.Core
 {
     public partial class InOutWatcher : ViewModelBase
     {
+        
+
         private IConfig _config;
         private ILogPersister _persister;
 
@@ -103,34 +105,28 @@ namespace InOutLog.Core
 
     public partial class InOutWatcher
     {
-        private bool _isInitialized;
-
         private ICommand _startupCommand;
         public ICommand StartupCommand
         {
             get
             {
                 return _startupCommand ??
-                  (_startupCommand = RegisterCommand(new RelayCommand(async x => 
-                  {
-                      if (_isInitialized) return;
-                      await StartupAsync();
-                      _isInitialized = true;
-                  }, x => true)));
+                  (_startupCommand = RegisterCommand(new RelayCommand(async x => await StartupAsync(), x => true)));
             }
         }
 
         public async Task StartupAsync()
         {
-            ScreenViewModel.ChangeScreen(Screen.Busy);
+            ScreenManager.SetBusy(true);
 
             var entry = await _persister.RestoreAsync();
             State = entry == null ? StateFactory.Create() : StateFactory.Create(entry.StateId, entry.Data);
             RaiseAllCanExecute();
             RaiseAllPropertyChanged();
 
-            ScreenViewModel.ChangeScreen(Screen.Ready);
+            ScreenManager.SetBusy(false);
         }
+    
 
         private RelayCommand _checkInCommand;
         public ICommand CheckInCommand

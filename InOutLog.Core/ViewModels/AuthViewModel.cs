@@ -50,7 +50,7 @@ namespace InOutLog.Core
 
         public async Task SignInCommandAsync()
         {
-            ScreenViewModel.ChangeScreen(Screen.Busy);
+            ScreenManager.SetBusy(true);
 
             var authData = await _authManager.SignInUserAsync(Username, Password);
             if (authData.Error != null)
@@ -59,7 +59,7 @@ namespace InOutLog.Core
                 await dialog.AlertAsync("Alert", authData.Error);
             }
 
-            ScreenViewModel.ChangeScreen(Screen.Ready);
+            ScreenManager.SetBusy(false);
         }
 
         private ICommand _signUpCommand;
@@ -74,7 +74,7 @@ namespace InOutLog.Core
 
         public async Task SignUpCommandAsync()
         {
-            ScreenViewModel.ChangeScreen(Screen.Busy);
+            ScreenManager.SetBusy(true);
 
             var authData = await _authManager.SignUpUserAsync(Username, Password);
             if (authData.Error != null)
@@ -83,7 +83,7 @@ namespace InOutLog.Core
                 await dialog.AlertAsync("Alert", authData.Error);
             }
 
-            ScreenViewModel.ChangeScreen(Screen.Ready);
+            ScreenManager.SetBusy(false);
         }
     }
 }

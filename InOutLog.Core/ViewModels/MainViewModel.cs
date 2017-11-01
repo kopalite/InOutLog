@@ -31,14 +31,14 @@ namespace InOutLog.Core
             }
         }
 
-        private ScreenViewModel _screenViewModel;
-        public ScreenViewModel ScreenViewModel
+        private ScreenManager _screenManager;
+        public ScreenManager ScreenManager
         {
-            get { return _screenViewModel; }
+            get { return _screenManager; }
             private set
             {
-                _screenViewModel = value;
-                NotifyPropertyChanged(() => ScreenViewModel);
+                _screenManager = value;
+                NotifyPropertyChanged(() => ScreenManager);
             }
         }
 
@@ -63,7 +63,7 @@ namespace InOutLog.Core
                 var safeUI = Externals.Resolve<ISafeUI>();
                 safeUI.Invoke(new Action(async () =>
                 {
-                    if (!ScreenViewModel.IsReady)
+                    if (!ScreenManager.IsReady)
                     {
                         return;
                     }
@@ -83,7 +83,7 @@ namespace InOutLog.Core
             null, 0, 1000);
 
             AuthViewModel = new AuthViewModel(_authManager);
-            ScreenViewModel = new ScreenViewModel();
+            ScreenManager = new ScreenManager();
             Watcher = new InOutWatcher(_persister);
         }
 

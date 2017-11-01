@@ -25,6 +25,7 @@
         <local:TimeSpanConverter x:Key="SpanConverter" />
         <local:VisibilityInverter x:Key="VisibilityInverter" />
         <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
+        
 
         <Style x:Key="TextClock" TargetType="{x:Type TextBlock}">
             <Setter Property="FontFamily" Value="{StaticResource Digital7}" />
@@ -67,7 +68,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Background="White"
-            Visibility="{Binding ScreenViewModel.IsAuth, Converter={StaticResource VisibilityConverter}}">
+            Visibility="{Binding ScreenManager.IsAuth, Converter={StaticResource VisibilityConverter}}">
 
             <Grid.RowDefinitions>
                 <!--  divider  -->
@@ -146,33 +147,17 @@
 
         </Grid>
 
-        <!--  'Please wait' splash  -->
-
-        <Grid
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Background="White"
-            Visibility="{Binding ScreenViewModel.IsBusy, Converter={StaticResource VisibilityConverter}}">
-
-            <TextBlock
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Style="{StaticResource TextClock}"
-                Text="Please wait..." />
-
-        </Grid>
-
         <!--  Commands & Watchers  -->
 
         <Grid x:Name="WatcherGrid"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Background="White" 
-            Visibility="{Binding ScreenViewModel.IsReady, Converter={StaticResource VisibilityConverter}}">
+            Visibility="{Binding ScreenManager.IsReady, Converter={StaticResource VisibilityConverter}}">
 
             <i:Interaction.Triggers>
                 <ei:PropertyChangedTrigger Binding="{Binding Visibility, ElementName=WatcherGrid}">
-                    <i:InvokeCommandAction Command="{Binding Path=Watcher.StartupCommand, Mode=OneWay}" />
+                    <i:InvokeCommandAction Command="{Binding Path=Watcher.StartupCommand}" />
                 </ei:PropertyChangedTrigger>
             </i:Interaction.Triggers>
 

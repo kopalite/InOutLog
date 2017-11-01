@@ -14,13 +14,14 @@ namespace InOutLog.Core
 
         public async Task<AuthData> GetAuthDataAsync()
         {
-            if (_authData == null)
+            if (_authData != null)
             {
                 return _authData;
             }
             
             await Task.Delay(1000);
-            return new AuthData("ivan.kopcanski");
+            _authData = new AuthData("ivan.kopcanski");
+            return _authData;
         }
 
         public async Task<AuthData> SignUpUserAsync(string username, string password)
@@ -35,19 +36,20 @@ namespace InOutLog.Core
                 IRestResponse response = client.Execute(request);
              */
 
-            var patchClient = await GetClientAsync();
-            patchClient.DefaultRequestHeaders.CacheControl.
+            //var patchClient = await GetClientAsync();
+            //patchClient.DefaultRequestHeaders.CacheControl.
 
 
-            var signUpClient = await GetClientAsync();
-            var content = new FormUrlEncodedContent(new[]
-            {
-                //"{\"client_name\":\"My Dynamic Client\",\"redirect_uris\": [\"https://client.example.com/callback\", \"https://client.example.com/callback2\"]}"
-                new KeyValuePair<string, string>("application/json", "{ 'client_name':'testClient', 'redirect_uris' : [] }"),
-            });
-            var response = await signUpClient.PostAsync("/oidc/register", content);
+            //var signUpClient = await GetClientAsync();
+            //var content = new FormUrlEncodedContent(new[]
+            //{
+            //    //"{\"client_name\":\"My Dynamic Client\",\"redirect_uris\": [\"https://client.example.com/callback\", \"https://client.example.com/callback2\"]}"
+            //    new KeyValuePair<string, string>("application/json", "{ 'client_name':'testClient', 'redirect_uris' : [] }"),
+            //});
+            //var response = await signUpClient.PostAsync("/oidc/register", content);
 
             await Task.Delay(1000);
+            ScreenManager.ChangeScreen(Screen.Ready);
             return new AuthData(username);
             
         }
@@ -55,30 +57,32 @@ namespace InOutLog.Core
         public async Task<AuthData> SignInUserAsync(string username, string password)
         {
             await Task.Delay(1000);
+            ScreenManager.ChangeScreen(Screen.Ready);
             return new AuthData(username);
         }
 
         public async Task<AuthData> SignInUserAsync()
         {
             await Task.Delay(1000);
+            ScreenManager.ChangeScreen(Screen.Ready);
             return new AuthData("ivan.kopcanski");
         }
 
-        private async Task<HttpClient> GetClientAsync()
-        {
-        //    var client = new RestClient("https://YOUR_AUTH0_DOMAIN/oidc/register");
-        //    var request = new RestRequest(Method.POST);
-        //    request.AddHeader("content-type", "application/json");
-        //    request.AddParameter("application/json", "{\"client_name\":\"My Dynamic Client\",\"redirect_uris\": [\"https://client.example.com/callback\", \"https://client.example.com/callback2\"]}", ParameterType.RequestBody);
-        //    IRestResponse response = client.Execute(request);
+        //private async Task<HttpClient> GetClientAsync()
+        //{
+        ////    var client = new RestClient("https://YOUR_AUTH0_DOMAIN/oidc/register");
+        ////    var request = new RestRequest(Method.POST);
+        ////    request.AddHeader("content-type", "application/json");
+        ////    request.AddParameter("application/json", "{\"client_name\":\"My Dynamic Client\",\"redirect_uris\": [\"https://client.example.com/callback\", \"https://client.example.com/callback2\"]}", ParameterType.RequestBody);
+        ////    IRestResponse response = client.Execute(request);
 
-            var config = Externals.Resolve<IConfig>();
-            var address = await config.GetAuthUrlAsync();
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(address);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            //client.DefaultRequestHeaders.Add("appkey", "myapp_key");
-            return client;
-        }
+        //    var config = Externals.Resolve<IConfig>();
+        //    var address = await config.GetAuthUrlAsync();
+        //    var client = new HttpClient();
+        //    client.BaseAddress = new Uri(address);
+        //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        //    //client.DefaultRequestHeaders.Add("appkey", "myapp_key");
+        //    return client;
+        //}
     }
 }

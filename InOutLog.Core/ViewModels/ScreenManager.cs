@@ -3,13 +3,12 @@
     public enum Screen
     {
         Auth = 0,
-        Busy = 1,
         Ready = 2
     }
 
-    public class ScreenViewModel : ViewModelBase
+    public class ScreenManager : ViewModelBase
     {
-        private static ScreenViewModel _instance;
+        private static ScreenManager _instance;
 
         private static Screen _screen;
 
@@ -18,17 +17,14 @@
             get { return _screen == Screen.Auth; }
         }
 
-        public bool IsBusy
-        {
-            get { return _screen == Screen.Busy; }
-        }
-
         public bool IsReady
         {
             get { return _screen == Screen.Ready; }
         }
 
-        public ScreenViewModel()
+        public bool IsBusy { get; private set; }
+
+        public ScreenManager()
         {
             if (_instance == null)
             {
@@ -39,7 +35,12 @@
         public static void ChangeScreen(Screen screen)
         {
             _screen = screen;
+            _instance.RaiseAllPropertyChanged();
+        }
 
+        public static void SetBusy(bool isBusy)
+        {
+            _instance.IsBusy = isBusy;
             _instance.RaiseAllPropertyChanged();
         }
     }
