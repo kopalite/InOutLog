@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Converters\ClockConverter.cs" />
     <Compile Include="Converters\TimeSpanConverter.cs" />
+    <Compile Include="Converters\BooleanInverter.cs" />
     <Compile Include="Converters\VisibilityInverter.cs" />
     <Compile Include="Externals\Config.cs" />
     <Compile Include="Externals\Dialog.cs" />

@@ -23,6 +23,7 @@
     <Window.Resources>
         <local:ClockConverter x:Key="ClockConverter" />
         <local:TimeSpanConverter x:Key="SpanConverter" />
+        <local:BooleanInverter x:Key="BooleanInverter" />
         <local:VisibilityInverter x:Key="VisibilityInverter" />
         <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
         
@@ -62,13 +63,32 @@
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
+        <!--busy splash-->
+
+        <Border
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="White" Opacity="0.70" Panel.ZIndex="10000"
+            Visibility="{Binding ScreenManager.IsBusy, Converter={StaticResource VisibilityConverter}}">
+
+                <TextBlock HorizontalAlignment="Center" 
+                           VerticalAlignment="Center" 
+                           Width="130" 
+                           Height="30"
+                           Style="{StaticResource TextClock}">
+                    Please wait...
+                </TextBlock>
+
+        </Border>
+
         <!--  OAuth panel  -->
 
         <Grid
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Background="White"
-            Visibility="{Binding ScreenManager.IsAuth, Converter={StaticResource VisibilityConverter}}">
+            Visibility="{Binding ScreenManager.IsAuth, Converter={StaticResource VisibilityConverter}}"
+            IsEnabled="{Binding ScreenManager.IsBusy, Converter={StaticResource BooleanInverter}}">
 
             <Grid.RowDefinitions>
                 <!--  divider  -->
@@ -153,7 +173,8 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Background="White" 
-            Visibility="{Binding ScreenManager.IsReady, Converter={StaticResource VisibilityConverter}}">
+            Visibility="{Binding ScreenManager.IsReady, Converter={StaticResource VisibilityConverter}}"
+            IsEnabled="{Binding ScreenManager.IsBusy, Converter={StaticResource BooleanInverter}}">
 
             <i:Interaction.Triggers>
                 <ei:PropertyChangedTrigger Binding="{Binding Visibility, ElementName=WatcherGrid}">
@@ -175,7 +196,7 @@
                 <!--  breakout  -->
                 <RowDefinition Height="35" />
                 <!--  divider  -->
-                <RowDefinition Height="10" />
+                <RowDefinition Height="13" />
                 <!--  reset  -->
                 <RowDefinition Height="35" />
             </Grid.RowDefinitions>
@@ -263,11 +284,11 @@
 
             <TextBlock
                 Grid.Row="6"
-                Grid.Column="1"
-                Grid.ColumnSpan="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                Text="-----------------------------------" />
+                Text="----------------------------------------------------------" />
 
             <!--  reset  -->
 
