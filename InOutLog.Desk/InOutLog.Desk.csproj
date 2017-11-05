@@ -94,6 +94,7 @@
     <Compile Include="Converters\TimeSpanConverter.cs" />
     <Compile Include="Converters\BooleanInverter.cs" />
     <Compile Include="Converters\VisibilityInverter.cs" />
+    <Compile Include="Externals\AuthManager.cs" />
     <Compile Include="Externals\Config.cs" />
     <Compile Include="Externals\Dialog.cs" />
     <Compile Include="Externals\SafeUI.cs" />

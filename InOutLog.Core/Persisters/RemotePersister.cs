@@ -22,7 +22,7 @@ namespace InOutLog.Core
 
         public RemotePersister(ILogPersister fallbackPersister)
         {
-            _authManager = Internals.Resolve<IAuthManager>();
+            _authManager = Externals.Resolve<IAuthManager>();
             _config = Externals.Resolve<IConfig>();
             _fallbackPersister = fallbackPersister;
             IsLocalMode = false;

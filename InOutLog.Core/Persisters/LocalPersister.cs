@@ -17,7 +17,7 @@ namespace InOutLog.Core
 
         public LocalPersister()
         {
-            _authManager = Internals.Resolve<IAuthManager>();
+            _authManager = Externals.Resolve<IAuthManager>();
         }
 
         private class Log

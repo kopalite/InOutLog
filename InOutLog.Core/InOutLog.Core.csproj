@@ -42,9 +42,7 @@
     <Compile Include="Externals\IConfig.cs" />
     <Compile Include="Externals\IDialog.cs" />
     <Compile Include="Externals\ISafeUI.cs" />
-    <Compile Include="Internals\Internals.cs" />
     <Compile Include="OAuth\AuthData.cs" />
-    <Compile Include="OAuth\AuthManager.cs" />
     <Compile Include="OAuth\IAuthManager.cs" />
     <Compile Include="Persisters\ILogPersister.cs" />
     <Compile Include="Persisters\LocalPersister.cs" />

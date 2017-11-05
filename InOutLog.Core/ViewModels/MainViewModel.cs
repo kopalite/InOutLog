@@ -56,7 +56,7 @@ namespace InOutLog.Core
         public MainViewModel()
         {
             _config = Externals.Resolve<IConfig>();
-            _authManager = Internals.Resolve<IAuthManager>();
+            _authManager = Externals.Resolve<IAuthManager>();
             _persister = PersisterFactory.Create();
             _refresher = new Timer(x =>
             {
