@@ -38,7 +38,7 @@ namespace InOutLog.Desk
                 }
                 else
                 {
-                    authData = new AuthData(result.User.Identity.Name, true, result.IdentityToken, result.AccessTokenExpiration, null);
+                    authData = new AuthData(result.User.Identity.Name, true, result.AccessToken, result.AccessTokenExpiration, null);
                 }
             }
             catch (Exception ex)

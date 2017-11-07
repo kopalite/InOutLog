@@ -136,7 +136,7 @@ namespace InOutLog.Core
             var client = new HttpClient();
             client.BaseAddress = new Uri(address);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            //client.DefaultRequestHeaders.Add("appkey", "myapp_key");
+            client.DefaultRequestHeaders.Add("authorization", string.Format("Bearer {0}", _authManager.AuthData.Token));
             return client;
         }
     }
