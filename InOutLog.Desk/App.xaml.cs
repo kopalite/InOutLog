@@ -1,6 +1,8 @@
 ﻿using InOutLog.Core;
 using System.Windows;
 using System;
+using System.Windows.Interop;
+using System.Windows.Navigation;
 
 namespace InOutLog.Desk
 {
@@ -8,8 +10,8 @@ namespace InOutLog.Desk
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            Externals.Register<IAuthManager>(() => new AuthManager());
             Externals.Register<IConfig>(() => new Config());
+            Externals.Register<IAuthManager>(() => new AuthManager(new Config()));
             Externals.Register<ISafeUI>(() => new SafeUI());
             Externals.Register<IDialog>(() => new Dialog());
 
@@ -19,6 +21,26 @@ namespace InOutLog.Desk
         protected override void OnExit(ExitEventArgs e)
         {
             Environment.Exit(0);
+        }
+
+        private class WindowWrapper : System.Windows.Forms.IWin32Window
+        {
+            public WindowWrapper(IntPtr handle)
+            {
+                _hwnd = handle;
+            }
+
+            public WindowWrapper(Window window)
+            {
+                _hwnd = new WindowInteropHelper(window).Handle;
+            }
+
+            public IntPtr Handle
+            {
+                get { return _hwnd; }
+            }
+
+            private IntPtr _hwnd;
         }
     }
 }

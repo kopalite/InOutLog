@@ -91,78 +91,32 @@
             IsEnabled="{Binding ScreenManager.IsBusy, Converter={StaticResource BooleanInverter}}">
 
             <Grid.RowDefinitions>
+                <!--  username label  -->
+                <RowDefinition Height=".50*" />
                 <!--  divider  -->
-                <RowDefinition Height="55" />
-                <!--  username  -->
-                <RowDefinition Height="35" />
-                <!--  password  -->
-                <RowDefinition Height="35" />
-                <!--  sign in  -->
-                <RowDefinition Height="35" />
+                <RowDefinition Height="5" />
+                <!--  sign in button  -->
+                <RowDefinition Height=".50*" />
             </Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <!--  labels  -->
-                <ColumnDefinition Width=".35*" />
-                <!--  divider  -->
-                <ColumnDefinition Width="10" />
-                <!--  inputs & buttons  -->
-                <ColumnDefinition Width=".65*" />
-                <!--  divider  -->
-                <ColumnDefinition Width="20" />
-            </Grid.ColumnDefinitions>
+            <!--  username label  -->
 
-            <!--  username label & input  -->
-
+            <!--{Binding AuthViewModel.Username}-->
             <TextBlock
-                Grid.Row="1"
-                Grid.Column="0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Text="Username:" />
+                Grid.Row="0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Text="ivan.kopcanski" />
 
-            <TextBox
-                Grid.Row="1"
-                Grid.Column="2"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
-                Text="{Binding AuthViewModel.Username}" />
-
-            <!--  password label & input  -->
-
-            <TextBlock
-                Grid.Row="2"
-                Grid.Column="0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Text="Password:" />
-
-            <PasswordBox
-                Grid.Row="2"
-                Grid.Column="2"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center" />
-
-            <!--  sign in / sign up buttons  -->
+            <!--  sign in button  -->
 
             <Button
                 Grid.Row="3"
-                Grid.Column="2"
                 Width="80"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
                 Command="{Binding AuthViewModel.SignInCommand}">
                 Sign in
-            </Button>
-
-            <Button
-                Grid.Row="3"
-                Grid.Column="2"
-                Width="80"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Command="{Binding AuthViewModel.SignUpCommand}">
-                Sign up
             </Button>
 
         </Grid>

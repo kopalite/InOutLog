@@ -7,6 +7,7 @@ namespace InOutLog.Core
     {
         private IConfig _config;
         private IAuthManager _authManager;
+        private IDialog _dialog;
         private ILogPersister _persister;
         private Timer _refresher;
         private int _syncCounter;
@@ -31,8 +32,8 @@ namespace InOutLog.Core
             }
         }
 
-        private ScreenManager _screenManager;
-        public ScreenManager ScreenManager
+        private ViewManager _screenManager;
+        public ViewManager ScreenManager
         {
             get { return _screenManager; }
             private set
@@ -57,7 +58,8 @@ namespace InOutLog.Core
         {
             _config = Externals.Resolve<IConfig>();
             _authManager = Externals.Resolve<IAuthManager>();
-            _persister = PersisterFactory.Create();
+            _dialog = Externals.Resolve<IDialog>();
+            _persister = new RemotePersister(_config, _authManager);
             _refresher = new Timer(x =>
             {
                 var safeUI = Externals.Resolve<ISafeUI>();
@@ -82,9 +84,9 @@ namespace InOutLog.Core
             }, 
             null, 0, 1000);
 
-            AuthViewModel = new AuthViewModel(_authManager);
-            ScreenManager = new ScreenManager();
-            Watcher = new InOutWatcher(_persister);
+            AuthViewModel = new AuthViewModel(_authManager, _dialog);
+            ScreenManager = new ViewManager();
+            Watcher = new InOutWatcher(_config, _authManager, _dialog, _persister);
         }
 
         #region [ IDisposable ]

@@ -15,9 +15,9 @@ namespace InOutLog.Core
 
         public bool IsLocalMode { get { return true; } }
 
-        public LocalPersister()
+        public LocalPersister(IAuthManager authManager)
         {
-            _authManager = Externals.Resolve<IAuthManager>();
+            _authManager = authManager;
         }
 
         private class Log

@@ -5,7 +5,9 @@ namespace InOutLog.Core
 {
     public interface IConfig
     {
-        Task<string> GetAuthUrlAsync();
+        Task<string> GetAuthDomainAsync();
+
+        Task<string> GetAuthClientIdAsync();
 
         Task<string> GetApiUrlAsync();
 

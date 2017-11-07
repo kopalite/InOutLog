@@ -1,17 +1,22 @@
-﻿using InOutLog.Core;
+﻿using Auth0.OidcClient;
+using IdentityModel.OidcClient;
+using InOutLog.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace InOutLog.Desk
 {
     public class AuthManager : IAuthManager
     {
+        private IConfig _config;
+
         private AuthData _authData;
+
+        public AuthManager(IConfig config) 
+        {
+            _config = config;
+        }
 
         public async Task<AuthData> GetAuthDataAsync()
         {
@@ -19,71 +24,44 @@ namespace InOutLog.Desk
             {
                 return _authData;
             }
-            
-            await Task.Delay(1000);
-            _authData = new AuthData("ivan.kopcanski");
-            return _authData;
-        }
-
-        public async Task<AuthData> SignUpUserAsync(string username, string password)
-        {
-            /*
-             var client = new RestClient("https://YOUR_AUTH0_DOMAIN/api/v2/tenants/settings");
-                var request = new RestRequest(Method.PATCH);
-                request.AddHeader("cache-control", "no-cache");
-                request.AddHeader("authorization", "Bearer API2_ACCESS_TOKEN");
-                request.AddHeader("content-type", "application/json");
-                request.AddParameter("application/json", "{ \"flags\": { \"enable_dynamic_client_registration\": true } }", ParameterType.RequestBody);
-                IRestResponse response = client.Execute(request);
-             */
-
-            //var patchClient = await GetClientAsync();
-            //patchClient.DefaultRequestHeaders.CacheControl.
-
-
-            //var signUpClient = await GetClientAsync();
-            //var content = new FormUrlEncodedContent(new[]
-            //{
-            //    //"{\"client_name\":\"My Dynamic Client\",\"redirect_uris\": [\"https://client.example.com/callback\", \"https://client.example.com/callback2\"]}"
-            //    new KeyValuePair<string, string>("application/json", "{ 'client_name':'testClient', 'redirect_uris' : [] }"),
-            //});
-            //var response = await signUpClient.PostAsync("/oidc/register", content);
-
-            await Task.Delay(1000);
-            ScreenManager.ChangeScreen(Screen.Ready);
-            return new AuthData(username);
-            
-        }
-
-        public async Task<AuthData> SignInUserAsync(string username, string password)
-        {
-            await Task.Delay(1000);
-            ScreenManager.ChangeScreen(Screen.Ready);
-            return new AuthData(username);
+            return (_authData = await SignInUserAsync());
         }
 
         public async Task<AuthData> SignInUserAsync()
         {
-            await Task.Delay(1000);
-            ScreenManager.ChangeScreen(Screen.Ready);
-            return new AuthData("ivan.kopcanski");
+            if (_authData != null)
+            {
+                return _authData;
+            }
+
+            AuthData retVal = null;
+            
+            var domain = (await _config.GetAuthDomainAsync());
+            var clientId = await _config.GetAuthClientIdAsync();
+            var client = new Auth0Client(new Auth0ClientOptions { Domain = domain, ClientId = clientId });
+            LoginResult result = null;
+
+            try
+            {
+                result = await client.LoginAsync();
+
+                if (result.IsError)
+                {
+                    retVal = new AuthData("Login error!", false, null, DateTime.MinValue, string.Format("Error occured: {0}", result.Error));
+                }
+                else
+                {
+                    retVal = new AuthData(result.User.Identity.Name, true, result.IdentityToken, result.AccessTokenExpiration, null);
+                    ViewManager.ChangeView(ViewType.Ready);
+                }
+            }
+            catch (Exception ex)
+            {
+                retVal = new AuthData("Login error!", false, null, DateTime.MinValue, string.Format("Error occured: {0}", ex.Message));
+            }
+
+            return retVal;
+            
         }
-
-        //private async Task<HttpClient> GetClientAsync()
-        //{
-        ////    var client = new RestClient("https://YOUR_AUTH0_DOMAIN/oidc/register");
-        ////    var request = new RestRequest(Method.POST);
-        ////    request.AddHeader("content-type", "application/json");
-        ////    request.AddParameter("application/json", "{\"client_name\":\"My Dynamic Client\",\"redirect_uris\": [\"https://client.example.com/callback\", \"https://client.example.com/callback2\"]}", ParameterType.RequestBody);
-        ////    IRestResponse response = client.Execute(request);
-
-        //    var config = Externals.Resolve<IConfig>();
-        //    var address = await config.GetAuthUrlAsync();
-        //    var client = new HttpClient();
-        //    client.BaseAddress = new Uri(address);
-        //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        //    //client.DefaultRequestHeaders.Add("appkey", "myapp_key");
-        //    return client;
-        //}
     }
 }

@@ -10,13 +10,17 @@ namespace InOutLog.Core
         
 
         private IConfig _config;
+        private IAuthManager _authManager;
+        private IDialog _dialog;
         private ILogPersister _persister;
 
         public IWatcherState State { get; private set; }        
 
-        public InOutWatcher(ILogPersister persister)
+        public InOutWatcher(IConfig config, IAuthManager authManager, IDialog dialog, ILogPersister persister)
         {
-            _config = Externals.Resolve<IConfig>();
+            _config = config;
+            _authManager = authManager;
+            _dialog = dialog;
             _persister = persister;
         }
 
@@ -78,8 +82,7 @@ namespace InOutLog.Core
             var interval = await _config.GetRefreshIntervalAsync();
             if (entry != null && entry.SessionId != Session.SessionId && (DateTime.UtcNow - entry.Timestamp) < interval)
             {
-                var dialog = Externals.Resolve<IDialog>();
-                await dialog.AlertAsync("Alert", "Syncing in progress... Please try again later.");
+                await _dialog.AlertAsync("Alert", "Syncing in progress... Please try again later.");
                 return;
             }
 
@@ -87,7 +90,8 @@ namespace InOutLog.Core
             RaiseAllCanExecute();
             RaiseAllPropertyChanged();
 
-            entry = await Entry.CreateAsync(State.StateId, State.Data);
+            var username = (await _authManager.GetAuthDataAsync()).Username;
+            entry = await Entry.CreateAsync(username, State.StateId, State.Data);
             await _persister.PersistAsync(entry);
         }
 
@@ -117,14 +121,14 @@ namespace InOutLog.Core
 
         public async Task StartupAsync()
         {
-            ScreenManager.SetBusy(true);
+            ViewManager.SetBusy(true);
 
             var entry = await _persister.RestoreAsync();
             State = entry == null ? StateFactory.Create() : StateFactory.Create(entry.StateId, entry.Data);
             RaiseAllCanExecute();
             RaiseAllPropertyChanged();
 
-            ScreenManager.SetBusy(false);
+            ViewManager.SetBusy(false);
         }
     
 

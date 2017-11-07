@@ -10,9 +10,15 @@ namespace InOutLog.Desk
 {
     internal class Config : IConfig
     {
-        public async Task<string> GetAuthUrlAsync()
+        public async Task<string> GetAuthDomainAsync()
         {
-            var result = ConfigurationManager.AppSettings["authUrl"];
+            var result = ConfigurationManager.AppSettings["authDomain"];
+            return await Task.FromResult(result);
+        }
+
+        public async Task<string> GetAuthClientIdAsync()
+        {
+            var result = ConfigurationManager.AppSettings["authClientId"];
             return await Task.FromResult(result);
         }
 

@@ -17,11 +17,16 @@ namespace InOutLog.Droid
             _context = context;
         }
 
-        public async Task<string> GetAuthUrlAsync()
+        public async Task<string> GetAuthDomainAsync()
         {
-            //TODO: read username from secured storage after user has signed up!
-            await EnsurePreferenceValueAsync("authApi", "https://inoutlog.auth0.com/api/v2/");
-            return await GetPreferenceValueAsync("authApi");
+            await EnsurePreferenceValueAsync("authDomain", "inoutlog.auth0.com");
+            return await GetPreferenceValueAsync("authDomain");
+        }
+
+        public async Task<string> GetAuthClientIdAsync()
+        {
+            await EnsurePreferenceValueAsync("authClientId", "0wHjlNC-Csn7M5vdf-j4djW_0r-V9aJM");
+            return await GetPreferenceValueAsync("authClientId");
         }
 
         public async Task<string> GetApiUrlAsync()

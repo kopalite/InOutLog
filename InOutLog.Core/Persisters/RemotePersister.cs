@@ -12,19 +12,17 @@ namespace InOutLog.Core
 {
     public class RemotePersister : ILogPersister
     {
-        private readonly IAuthManager _authManager;
-
         private readonly IConfig _config;
-
+        private readonly IAuthManager _authManager;
         private readonly ILogPersister _fallbackPersister;
 
         public bool IsLocalMode { get; private set; }
 
-        public RemotePersister(ILogPersister fallbackPersister)
+        public RemotePersister(IConfig config, IAuthManager authManager)
         {
-            _authManager = Externals.Resolve<IAuthManager>();
-            _config = Externals.Resolve<IConfig>();
-            _fallbackPersister = fallbackPersister;
+            _config = config;
+            _authManager = authManager;
+            _fallbackPersister = new LocalPersister(_authManager);
             IsLocalMode = false;
         }
 

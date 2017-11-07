@@ -24,23 +24,13 @@ namespace InOutLog.Core
 
         public override async Task<IWatcherState> ResetAsync()
         {
-            var dialog = Externals.Resolve<IDialog>();
-            var isConfirmed = false;
-            await dialog.OptionAsync("Alert", "Discard today's log?", 
-                                      () => { isConfirmed = true; }, 
-                                      () => { isConfirmed = false; });
-            if (!isConfirmed)
-            {
-                return this;
-            }
-
             Data.StartedAt = null;
             Data.StoppedAt = null;
             Data.BreakStartedAt = null;
             Data.BreakStoppedAt = null;
             Data.BreaksTotal = TimeSpan.Zero;
             
-            return new IdleState(Data);
+            return await Task.FromResult<IWatcherState>(new IdleState(Data));
         }
 
         public override TimeSpan GetCheckInTime()

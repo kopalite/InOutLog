@@ -6,7 +6,8 @@ namespace InOutLog.Core
 {
     public partial class AuthViewModel : ViewModelBase
     {
-        private IAuthManager _authManager;        
+        private IAuthManager _authManager;
+        private IDialog _dialog;
 
         private string _username;
         public string Username
@@ -19,20 +20,10 @@ namespace InOutLog.Core
             }
         }
 
-        private string _password;
-        public string Password
-        {
-            get { return _password; }
-            set
-            {
-                _username = value;
-                NotifyPropertyChanged(() => Password);
-            }
-        }
-
-        public AuthViewModel(IAuthManager authManager)
+        public AuthViewModel(IAuthManager authManager, IDialog dialog)
         {
             _authManager = authManager;
+            _dialog = dialog;
         }
     }
 
@@ -50,40 +41,15 @@ namespace InOutLog.Core
 
         public async Task SignInCommandAsync()
         {
-            ScreenManager.SetBusy(true);
+            ViewManager.SetBusy(true);
 
-            var authData = await _authManager.SignInUserAsync(Username, Password);
+            var authData = await _authManager.SignInUserAsync();
             if (authData.Error != null)
             {
-                var dialog = Externals.Resolve<IDialog>();
-                await dialog.AlertAsync("Alert", authData.Error);
+                await _dialog.AlertAsync("Alert", authData.Error);
             }
 
-            ScreenManager.SetBusy(false);
-        }
-
-        private ICommand _signUpCommand;
-        public ICommand SignUpCommand
-        {
-            get
-            {
-                return _signUpCommand ??
-                  (_signUpCommand = RegisterCommand(new RelayCommand(async x => await SignUpCommandAsync(), x => true)));
-            }
-        }
-
-        public async Task SignUpCommandAsync()
-        {
-            ScreenManager.SetBusy(true);
-
-            var authData = await _authManager.SignUpUserAsync(Username, Password);
-            if (authData.Error != null)
-            {
-                var dialog = Externals.Resolve<IDialog>();
-                await dialog.AlertAsync("Alert", authData.Error);
-            }
-
-            ScreenManager.SetBusy(false);
+            ViewManager.SetBusy(false);
         }
     }
 }

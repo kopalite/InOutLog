@@ -1,30 +1,30 @@
 ﻿namespace InOutLog.Core
 {
-    public enum Screen
+    public enum ViewType
     {
         Auth = 0,
         Ready = 2
     }
 
-    public class ScreenManager : ViewModelBase
+    public class ViewManager : ViewModelBase
     {
-        private static ScreenManager _instance;
+        private static ViewManager _instance;
 
-        private static Screen _screen;
+        private static ViewType _screen;
 
         public bool IsAuth
         {
-            get { return _screen == Screen.Auth; }
+            get { return _screen == ViewType.Auth; }
         }
 
         public bool IsReady
         {
-            get { return _screen == Screen.Ready; }
+            get { return _screen == ViewType.Ready; }
         }
 
         public bool IsBusy { get; private set; }
 
-        public ScreenManager()
+        public ViewManager()
         {
             if (_instance == null)
             {
@@ -32,7 +32,7 @@
             }
         }
 
-        public static void ChangeScreen(Screen screen)
+        public static void ChangeView(ViewType screen)
         {
             _screen = screen;
             _instance.RaiseAllPropertyChanged();
