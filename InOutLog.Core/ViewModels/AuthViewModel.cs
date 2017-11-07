@@ -43,10 +43,14 @@ namespace InOutLog.Core
         {
             ViewManager.SetBusy(true);
 
-            var authData = await _authManager.SignInUserAsync();
-            if (authData.Error != null)
+            await _authManager.SignInUserAsync();
+            if (_authManager.AuthData.IsAuthenticated)
             {
-                await _dialog.AlertAsync("Alert", authData.Error);
+                ViewManager.ChangeView(ViewType.Ready);
+            }
+            else
+            {
+                await _dialog.AlertAsync("Alert", _authManager.AuthData.Error);
             }
 
             ViewManager.SetBusy(false);

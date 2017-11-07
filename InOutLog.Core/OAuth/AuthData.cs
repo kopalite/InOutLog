@@ -10,11 +10,11 @@ namespace InOutLog.Core
 
         public string Token { get; private set; }
 
-        public DateTime ExpiresOn { get; private set; }
+        public DateTime? ExpiresOn { get; private set; }
 
         public string Error { get; private set; }
 
-        public AuthData(string username, bool isAuthenticated, string token, DateTime expiresOn, string error)
+        public AuthData(string username, bool isAuthenticated, string token, DateTime? expiresOn, string error)
         {
             Username = username;
             IsAuthenticated = isAuthenticated;

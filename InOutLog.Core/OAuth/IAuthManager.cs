@@ -4,8 +4,8 @@ namespace InOutLog.Core
 {
     public interface IAuthManager
     {
-        Task<AuthData> GetAuthDataAsync();
+        AuthData AuthData { get; }
 
-        Task<AuthData> SignInUserAsync();
+        Task SignInUserAsync();
     }
 }

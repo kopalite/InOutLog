@@ -36,7 +36,7 @@ namespace InOutLog.Core
             try
             {
                 var client = await GetClientAsync();
-                var username = (await _authManager.GetAuthDataAsync()).Username;
+                var username = _authManager.AuthData.Username;
                 var entryDate = Entry.GetEntryDate();
                 var url = string.Format("/api/entries/find/{0}/{1}", username, entryDate);
                 var response = await client.GetAsync(url);
@@ -109,7 +109,7 @@ namespace InOutLog.Core
             try
             {
                 var client = await GetClientAsync();
-                var username = (await _authManager.GetAuthDataAsync()).Username;
+                var username = _authManager.AuthData.Username;
                 var entryDate = Entry.GetEntryDate();
                 var url = string.Format("/api/entries/{0}/{1}", username, entryDate);
                 var response = await client.DeleteAsync(url);

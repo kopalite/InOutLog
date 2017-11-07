@@ -90,7 +90,7 @@ namespace InOutLog.Core
             RaiseAllCanExecute();
             RaiseAllPropertyChanged();
 
-            var username = (await _authManager.GetAuthDataAsync()).Username;
+            var username = _authManager.AuthData.Username;
             entry = await Entry.CreateAsync(username, State.StateId, State.Data);
             await _persister.PersistAsync(entry);
         }

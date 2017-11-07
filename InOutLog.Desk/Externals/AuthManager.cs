@@ -11,30 +11,17 @@ namespace InOutLog.Desk
     {
         private IConfig _config;
 
-        private AuthData _authData;
+        public AuthData AuthData { get; private set; }
 
         public AuthManager(IConfig config) 
         {
             _config = config;
         }
 
-        public async Task<AuthData> GetAuthDataAsync()
+        public async Task SignInUserAsync()
         {
-            if (_authData != null)
-            {
-                return _authData;
-            }
-            return (_authData = await SignInUserAsync());
-        }
 
-        public async Task<AuthData> SignInUserAsync()
-        {
-            if (_authData != null)
-            {
-                return _authData;
-            }
-
-            AuthData retVal = null;
+            AuthData authData = null;
             
             var domain = (await _config.GetAuthDomainAsync());
             var clientId = await _config.GetAuthClientIdAsync();
@@ -47,21 +34,19 @@ namespace InOutLog.Desk
 
                 if (result.IsError)
                 {
-                    retVal = new AuthData("Login error!", false, null, DateTime.MinValue, string.Format("Error occured: {0}", result.Error));
+                    authData = new AuthData("Login error!", false, null, null, string.Format("Error occured: {0}", result.Error));
                 }
                 else
                 {
-                    retVal = new AuthData(result.User.Identity.Name, true, result.IdentityToken, result.AccessTokenExpiration, null);
-                    ViewManager.ChangeView(ViewType.Ready);
+                    authData = new AuthData(result.User.Identity.Name, true, result.IdentityToken, result.AccessTokenExpiration, null);
                 }
             }
             catch (Exception ex)
             {
-                retVal = new AuthData("Login error!", false, null, DateTime.MinValue, string.Format("Error occured: {0}", ex.Message));
+                authData = new AuthData("Login error!", false, null, null, string.Format("Error occured: {0}", ex.Message));
             }
 
-            return retVal;
-            
+            AuthData = authData;
         }
     }
 }
