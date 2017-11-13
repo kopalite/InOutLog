@@ -22,6 +22,12 @@ namespace InOutLog.Desk
             return await Task.FromResult(result);
         }
 
+        public async Task<string> GetAuthAudienceAsync()
+        {
+            var result = ConfigurationManager.AppSettings["authAudience"];
+            return await Task.FromResult(result);
+        }
+
         public async Task<string> GetApiUrlAsync()
         {
             var result = ConfigurationManager.AppSettings["apiUrl"];

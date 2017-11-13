@@ -9,6 +9,8 @@ namespace InOutLog.Core
 
         Task<string> GetAuthClientIdAsync();
 
+        Task<string> GetAuthAudienceAsync();
+
         Task<string> GetApiUrlAsync();
 
         Task<TimeSpan> GetRefreshIntervalAsync();

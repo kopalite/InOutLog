@@ -10,10 +10,10 @@ namespace InOutLog.Desk
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            Externals.Register<IConfig>(() => new Config());
-            Externals.Register<IAuthManager>(() => new AuthManager(new Config()));
-            Externals.Register<ISafeUI>(() => new SafeUI());
-            Externals.Register<IDialog>(() => new Dialog());
+            InOutLog.Core.Externals.Register<IConfig>(() => new Config());
+            InOutLog.Core.Externals.Register<IAuthManager>(() => new AuthManager(new Config()));
+            InOutLog.Core.Externals.Register<ISafeUI>(() => new SafeUI());
+            InOutLog.Core.Externals.Register<IDialog>(() => new Dialog());
 
             base.OnStartup(e);
         }

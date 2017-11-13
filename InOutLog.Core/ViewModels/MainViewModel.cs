@@ -56,6 +56,8 @@ namespace InOutLog.Core
         
         public MainViewModel()
         {
+            ScreenManager = new ViewManager();
+
             _config = Externals.Resolve<IConfig>();
             _authManager = Externals.Resolve<IAuthManager>();
             _dialog = Externals.Resolve<IDialog>();
@@ -85,7 +87,7 @@ namespace InOutLog.Core
             null, 0, 1000);
 
             AuthViewModel = new AuthViewModel(_authManager, _dialog);
-            ScreenManager = new ViewManager();
+            
             Watcher = new InOutWatcher(_config, _authManager, _dialog, _persister);
         }
 

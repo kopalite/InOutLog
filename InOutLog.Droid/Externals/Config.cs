@@ -29,6 +29,12 @@ namespace InOutLog.Droid
             return await GetPreferenceValueAsync("authClientId");
         }
 
+        public async Task<string> GetAuthAudienceAsync()
+        {
+            await EnsurePreferenceValueAsync("authAudience", "https://inoutlog.auth0.com/api/v2/");
+            return await GetPreferenceValueAsync("authAudience");
+        }
+
         public async Task<string> GetApiUrlAsync()
         {
             await EnsurePreferenceValueAsync("apiUrl", "http://inoutlog.openode.io");

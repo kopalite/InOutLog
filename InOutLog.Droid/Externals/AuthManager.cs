@@ -4,9 +4,8 @@ using InOutLog.Core;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace InOutLog.Desk
+namespace InOutLog.Droid
 {
     public class AuthManager : IAuthManager
     {

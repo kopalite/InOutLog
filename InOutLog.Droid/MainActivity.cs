@@ -16,9 +16,10 @@ namespace InOutLog.Droid
         {
             base.OnCreate(bundle);
 
-            Core.Externals.Register<IConfig>(() => new Config(this));
-            Core.Externals.Register<ISafeUI>(() => new SafeUI());
-            Core.Externals.Register<IDialog>(() => new Dialog(this));
+            Externals.Register<IConfig>(() => new Config(this));
+            Externals.Register<IAuthManager>(() => new AuthManager(new Config(this)));
+            Externals.Register<ISafeUI>(() => new SafeUI());
+            Externals.Register<IDialog>(() => new Dialog(this));
 
             SetContentView(Resource.Layout.Main);
 
