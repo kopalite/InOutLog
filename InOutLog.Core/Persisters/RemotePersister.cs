@@ -46,6 +46,10 @@ namespace InOutLog.Core
                     var entries = JsonConvert.DeserializeObject<Entry[]>(serialized);
                     return entries.OrderBy(x => x.EntryDate).LastOrDefault();
                 }
+                else
+                {
+                    IsLocalMode = true;
+                }
             }
             catch (Exception e)
             {
@@ -83,6 +87,10 @@ namespace InOutLog.Core
                 {
                     return entryJson;
                 }
+                else
+                {
+                    IsLocalMode = true;
+                }
             }
             catch (Exception e)
             {
@@ -116,6 +124,10 @@ namespace InOutLog.Core
                 if (response.IsSuccessStatusCode)
                 {
                     return;
+                }
+                else
+                {
+                    IsLocalMode = true;
                 }
             }
             catch (Exception e)
