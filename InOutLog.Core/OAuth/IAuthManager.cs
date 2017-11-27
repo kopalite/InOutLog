@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace InOutLog.Core
 {
@@ -6,6 +7,8 @@ namespace InOutLog.Core
     {
         AuthData AuthData { get; }
 
-        Task SignInUserAsync();
+        Task StartSignInAsync(params object[] args);
+
+        Task AfterSignInAsync(params object[] args);
     }
 }

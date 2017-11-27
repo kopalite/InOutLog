@@ -1,4 +1,4 @@
-﻿using System;
+﻿#define DESK
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -7,7 +7,12 @@ namespace InOutLog.Core
     public partial class AuthViewModel : ViewModelBase
     {
         private IAuthManager _authManager;
-        private IDialog _dialog;
+
+        private ViewManager _viewManager;
+        public ViewManager ViewManager
+        {
+            get { return _viewManager; }
+        }
 
         private string _username;
         public string Username
@@ -20,10 +25,10 @@ namespace InOutLog.Core
             }
         }
 
-        public AuthViewModel(IAuthManager authManager, IDialog dialog)
+        public AuthViewModel()
         {
-            _authManager = authManager;
-            _dialog = dialog;
+            _viewManager = new ViewManager();
+            _authManager = Externals.Resolve<IAuthManager>();
         }
     }
 
@@ -43,15 +48,11 @@ namespace InOutLog.Core
         {
             ViewManager.SetBusy(true);
 
-            await _authManager.SignInUserAsync();
-            if (_authManager.AuthData.IsAuthenticated)
-            {
-                ViewManager.ChangeView(ViewType.Ready);
-            }
-            else
-            {
-                await _dialog.AlertAsync("Alert", _authManager.AuthData.Error);
-            }
+            await _authManager.StartSignInAsync();
+
+#if DESK
+            await _authManager.AfterSignInAsync();
+#endif
 
             ViewManager.SetBusy(false);
         }

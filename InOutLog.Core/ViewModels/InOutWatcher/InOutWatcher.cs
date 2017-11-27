@@ -7,8 +7,6 @@ namespace InOutLog.Core
 {
     public partial class InOutWatcher : ViewModelBase
     {
-        
-
         private IConfig _config;
         private IAuthManager _authManager;
         private IDialog _dialog;

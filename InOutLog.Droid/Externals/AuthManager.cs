@@ -1,4 +1,6 @@
-﻿using Auth0.OidcClient;
+﻿using Android.App;
+using Android.Content;
+using Auth0.OidcClient;
 using IdentityModel.OidcClient;
 using InOutLog.Core;
 using System;
@@ -11,27 +13,60 @@ namespace InOutLog.Droid
     {
         private IConfig _config;
 
+        private IDialog _dialog;
+
+        private Auth0Client _authClient;
+
+        private AuthorizeState _authState;
+
         public AuthData AuthData { get; private set; }
 
-        public AuthManager(IConfig config) 
+        public AuthManager()
         {
-            _config = config;
+            _config = Externals.Resolve<IConfig>();
+            _dialog = Externals.Resolve<IDialog>();
         }
 
-        public async Task SignInUserAsync()
+        public async Task StartSignInAsync(params object[] args)
         {
-
             AuthData authData = null;
             
             var domain = await _config.GetAuthDomainAsync();
             var clientId = await _config.GetAuthClientIdAsync();
             var audience = await _config.GetAuthAudienceAsync();
-            var client = new Auth0Client(new Auth0ClientOptions { Domain = domain, ClientId = clientId });
+            var activity = args[0] as Activity;
+
+            _authClient = new Auth0Client(new Auth0ClientOptions
+            {
+                Domain = domain,
+                ClientId = clientId,
+                Activity = activity
+            });
 
             try
             {
-                var result = await client.LoginAsync(new { audience = audience });
+                _authState = await _authClient.PrepareLoginAsync(new { audience = audience });
+                var uri = Android.Net.Uri.Parse(_authState.StartUrl);
+                var intent = new Intent(Intent.ActionView, uri);
+                intent.AddFlags(ActivityFlags.NoHistory);
+                activity.StartActivity(intent);
+            }
+            catch (Exception ex)
+            {
+                authData = new AuthData("Login error!", false, null, null, string.Format("Error occured: {0}", ex.Message));
+            }
 
+            AuthData = authData;
+        }
+
+        public async Task AfterSignInAsync(params object[] args)
+        {
+            AuthData authData = null;
+
+            try
+            {
+                var intent = args[0] as Intent;
+                var result = await _authClient.ProcessResponseAsync(intent.DataString, _authState);
                 if (result.IsError)
                 {
                     authData = new AuthData("Login error!", false, null, null, string.Format("Error occured: {0}", result.Error));
@@ -47,6 +82,15 @@ namespace InOutLog.Droid
             }
 
             AuthData = authData;
+
+            if (AuthData.IsAuthenticated)
+            {
+                ViewManager.ChangeView(ViewType.Ready);
+            }
+            else
+            {
+                await _dialog.AlertAsync("Alert", AuthData.Error);
+            }
         }
 
         private string GetAuthUsername(ClaimsPrincipal claims)

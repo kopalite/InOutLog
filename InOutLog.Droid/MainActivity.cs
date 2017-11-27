@@ -4,27 +4,50 @@ using Android.OS;
 using InOutLog.Core;
 using GalaSoft.MvvmLight.Helpers;
 using System;
+using Android.Content.PM;
+using Android.Content;
 
 namespace InOutLog.Droid
 {
-    [Activity(Label = "In/Out Log", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "In/Out Log", MainLauncher = true, Icon = "@drawable/icon", LaunchMode = LaunchMode.SingleTask)]
+
+    [IntentFilter(new[] { Intent.ActionView }, 
+                  Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable },
+                  DataScheme = "inoutlog.droid", 
+                  DataHost = "inoutlog.auth0.com", 
+                  DataPathPrefix = "/android/inoutlog.droid/callback")]
+
     public partial class MainActivity : Activity
     {
         private MainViewModel _mainViewModel;
-        
+
         protected override async void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
-            Externals.Register<IConfig>(() => new Config(this));
-            Externals.Register<IAuthManager>(() => new AuthManager(new Config(this)));
+            Externals.Register<IConfig>(() => new Config(this), true);
+            Externals.Register<IAuthManager>(() => new AuthManager(), true);
             Externals.Register<ISafeUI>(() => new SafeUI());
             Externals.Register<IDialog>(() => new Dialog(this));
-
-            SetContentView(Resource.Layout.Main);
+            Externals.Lock();
 
             _mainViewModel = new MainViewModel();
+            await _mainViewModel.AuthManager.StartSignInAsync(this);
+        }
+
+        protected override async void OnNewIntent(Intent intent)
+        {
+            base.OnNewIntent(intent);
+            
+            await _mainViewModel.AuthManager.AfterSignInAsync(intent);
             await _mainViewModel.Watcher.StartupAsync();
+
+            SetContentViewBindings();
+        }
+
+        private void SetContentViewBindings()
+        {
+            SetContentView(Resource.Layout.Main);
 
             //commands setting
 

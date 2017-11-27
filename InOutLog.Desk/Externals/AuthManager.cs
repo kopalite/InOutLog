@@ -12,14 +12,17 @@ namespace InOutLog.Desk
     {
         private IConfig _config;
 
+        private IDialog _dialog;
+
         public AuthData AuthData { get; private set; }
 
-        public AuthManager(IConfig config) 
+        public AuthManager() 
         {
-            _config = config;
+            _config = Externals.Resolve<IConfig>();
+            _dialog = Externals.Resolve<IDialog>();
         }
 
-        public async Task SignInUserAsync()
+        public async Task StartSignInAsync(params object[] args)
         {
 
             AuthData authData = null;
@@ -48,6 +51,18 @@ namespace InOutLog.Desk
             }
 
             AuthData = authData;
+        }
+
+        public async Task AfterSignInAsync(params object[] args)
+        {
+            if (AuthData.IsAuthenticated)
+            {
+                ViewManager.ChangeView(ViewType.Ready);
+            }
+            else
+            {
+                await _dialog.AlertAsync("Alert", AuthData.Error);
+            }
         }
 
         private string GetAuthUsername(ClaimsPrincipal claims)
