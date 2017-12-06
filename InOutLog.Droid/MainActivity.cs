@@ -29,6 +29,7 @@ namespace InOutLog.Droid
             Externals.Register<IAuthManager>(() => new AuthManager(), true);
             Externals.Register<ISafeUI>(() => new SafeUI());
             Externals.Register<IDialog>(() => new Dialog(this));
+
             Externals.Lock();
 
             _mainViewModel = new MainViewModel();
