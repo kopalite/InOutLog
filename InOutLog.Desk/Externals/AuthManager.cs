@@ -10,15 +10,12 @@ namespace InOutLog.Desk
 {
     public class AuthManager : IAuthManager
     {
-        private IConfig _config;
-
         private IDialog _dialog;
 
         public AuthData AuthData { get; private set; }
 
         public AuthManager() 
         {
-            _config = Externals.Resolve<IConfig>();
             _dialog = Externals.Resolve<IDialog>();
         }
 
@@ -27,9 +24,9 @@ namespace InOutLog.Desk
 
             AuthData authData = null;
             
-            var domain = await _config.GetAuthDomainAsync();
-            var clientId = await _config.GetAuthClientIdAsync();
-            var audience = await _config.GetAuthAudienceAsync();
+            var domain = Settings.AuthDomain;
+            var clientId = Settings.AuthClientId;
+            var audience = Settings.AuthAudience;
             var client = new Auth0Client(new Auth0ClientOptions { Domain = domain, ClientId = clientId });
 
             try

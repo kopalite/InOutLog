@@ -5,7 +5,6 @@ namespace InOutLog.Core
 {
     public partial class MainViewModel : ViewModelBase
     {
-        private IConfig _config;
         private IDialog _dialog;
         private ILogPersister _persister;
         private Timer _refresher;
@@ -47,10 +46,10 @@ namespace InOutLog.Core
         {
             _viewManager = new ViewManager();
 
-            _config = Externals.Resolve<IConfig>();
+            
             _authManager = Externals.Resolve<IAuthManager>();
             _dialog = Externals.Resolve<IDialog>();
-            _persister = new RemotePersister(_config, _authManager);
+            _persister = new RemotePersister(_authManager);
             _refresher = new Timer(x =>
             {
                 var safeUI = Externals.Resolve<ISafeUI>();
@@ -63,7 +62,7 @@ namespace InOutLog.Core
 
                     _syncCounter++;
 
-                    var interval = await _config.GetRefreshIntervalAsync();
+                    var interval = Settings.RefreshInterval;
 
                     if (_syncCounter > 0 && _syncCounter % interval.Seconds == 0)
                     {
@@ -75,7 +74,7 @@ namespace InOutLog.Core
             }, 
             null, 0, 1000);
             
-            Watcher = new InOutWatcher(_config, _authManager, _dialog, _persister);
+            Watcher = new InOutWatcher(_authManager, _dialog, _persister);
         }
 
         #region [ IDisposable ]

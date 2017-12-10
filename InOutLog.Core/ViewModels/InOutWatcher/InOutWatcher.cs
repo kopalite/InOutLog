@@ -7,16 +7,14 @@ namespace InOutLog.Core
 {
     public partial class InOutWatcher : ViewModelBase
     {
-        private IConfig _config;
         private IAuthManager _authManager;
         private IDialog _dialog;
         private ILogPersister _persister;
 
         public IWatcherState State { get; private set; }        
 
-        public InOutWatcher(IConfig config, IAuthManager authManager, IDialog dialog, ILogPersister persister)
+        public InOutWatcher(IAuthManager authManager, IDialog dialog, ILogPersister persister)
         {
-            _config = config;
             _authManager = authManager;
             _dialog = dialog;
             _persister = persister;
@@ -77,7 +75,7 @@ namespace InOutLog.Core
         private async Task ChangeStateAsync(Func<IWatcherState> action)
         {
             var entry = await _persister.RestoreAsync();
-            var interval = await _config.GetRefreshIntervalAsync();
+            var interval = Settings.RefreshInterval;
             if (entry != null && entry.SessionId != Session.SessionId && (DateTime.UtcNow - entry.Timestamp) < interval)
             {
                 await _dialog.AlertAsync("Alert", "Syncing in progress... Please try again later.");

@@ -12,15 +12,13 @@ namespace InOutLog.Core
 {
     public class RemotePersister : ILogPersister
     {
-        private readonly IConfig _config;
         private readonly IAuthManager _authManager;
         private readonly ILogPersister _fallbackPersister;
 
         public bool IsLocalMode { get; private set; }
 
-        public RemotePersister(IConfig config, IAuthManager authManager)
+        public RemotePersister(IAuthManager authManager)
         {
-            _config = config;
             _authManager = authManager;
             _fallbackPersister = new LocalPersister(_authManager);
             IsLocalMode = false;
@@ -35,7 +33,7 @@ namespace InOutLog.Core
 
             try
             {
-                var client = await GetClientAsync();
+                var client = GetClient();
                 var username = _authManager.AuthData.Username;
                 var entryDate = Entry.GetEntryDate();
                 var url = string.Format("/api/entries/find/{0}/{1}", username, entryDate);
@@ -80,7 +78,7 @@ namespace InOutLog.Core
             try
             {
                 var entryJson = JsonConvert.SerializeObject(entry);
-                var client = await GetClientAsync();
+                var client = GetClient();
                 var content = new StringContent(entryJson, Encoding.UTF8, "application/json");
                 var response = await client.PutAsync("/api/entries", content);
                 if (response.IsSuccessStatusCode)
@@ -116,7 +114,7 @@ namespace InOutLog.Core
 
             try
             {
-                var client = await GetClientAsync();
+                var client = GetClient();
                 var username = _authManager.AuthData.Username;
                 var entryDate = Entry.GetEntryDate();
                 var url = string.Format("/api/entries/{0}/{1}", username, entryDate);
@@ -142,11 +140,10 @@ namespace InOutLog.Core
             };
         }
 
-        private async Task<HttpClient> GetClientAsync()
+        private HttpClient GetClient()
         {
-            var address = await _config.GetApiUrlAsync();
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(address);
+            var address = Settings.ApiUrl;
+            var client = new HttpClient { BaseAddress = new Uri(address) };
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add("authorization", string.Format("Bearer {0}", _authManager.AuthData.Token));
             return client;

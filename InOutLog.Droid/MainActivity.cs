@@ -25,7 +25,6 @@ namespace InOutLog.Droid
         {
             base.OnCreate(bundle);
 
-            Externals.Register<IConfig>(() => new Config(this), true);
             Externals.Register<IAuthManager>(() => new AuthManager(), true);
             Externals.Register<ISafeUI>(() => new SafeUI());
             Externals.Register<IDialog>(() => new Dialog(this));

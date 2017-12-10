@@ -14,11 +14,11 @@ namespace InOutLog.Test
         {
             var data = new WatcherData();
             var state = new IdleState(data);
-            var configMock = (new Moq.Mock<IConfig>()).Object;
+            
             var authMgrMock = (new Moq.Mock<IAuthManager>()).Object;
             var dialogMock = (new Moq.Mock<IDialog>()).Object;
             var persisterMock = (new Moq.Mock<ILogPersister>()).Object;
-            _watcher = new InOutWatcher(configMock, authMgrMock, dialogMock, persisterMock);
+            _watcher = new InOutWatcher(authMgrMock, dialogMock, persisterMock);
         }
 
         [TestMethod]

@@ -11,8 +11,6 @@ namespace InOutLog.Droid
 {
     public class AuthManager : IAuthManager
     {
-        private IConfig _config;
-
         private IDialog _dialog;
 
         private Auth0Client _authClient;
@@ -23,7 +21,6 @@ namespace InOutLog.Droid
 
         public AuthManager()
         {
-            _config = Externals.Resolve<IConfig>();
             _dialog = Externals.Resolve<IDialog>();
         }
 
@@ -31,9 +28,9 @@ namespace InOutLog.Droid
         {
             AuthData authData = null;
             
-            var domain = await _config.GetAuthDomainAsync();
-            var clientId = await _config.GetAuthClientIdAsync();
-            var audience = await _config.GetAuthAudienceAsync();
+            var domain =   Settings.AuthDomain;
+            var clientId = Settings.AuthClientId;
+            var audience = Settings.AuthAudience;
             var activity = args[0] as Activity;
 
             _authClient = new Auth0Client(new Auth0ClientOptions
