@@ -1,6 +1,8 @@
 ﻿using System;
 using InOutLog.Core;
 using Android.App;
+using Plugin.CurrentActivity;
+using System.Diagnostics;
 
 namespace InOutLog.Droid
 {
@@ -8,7 +10,8 @@ namespace InOutLog.Droid
     {
         public void Invoke(Action action)
         {
-            action();
+            var activity = CrossCurrentActivity.Current.Activity;
+            activity.RunOnUiThread(action);
         }
     }
 }

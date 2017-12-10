@@ -3,23 +3,18 @@ using Android.App;
 using Android.Content;
 using InOutLog.Core;
 using System.Threading.Tasks;
+using Plugin.CurrentActivity;
 
 namespace InOutLog.Droid
 {
     internal class Dialog : IDialog
     {
-        private readonly Context _context;
-
-        public Dialog(Context context)
-        {
-            _context = context;
-        }
-
         public async Task AlertAsync(string title, string message)
         {
             TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
 
-            var alert = new AlertDialog.Builder(_context);
+            var activity = CrossCurrentActivity.Current.Activity;
+            var alert = new AlertDialog.Builder(activity);
             alert.SetTitle(title);
             alert.SetMessage(message);
             alert.SetPositiveButton("OK", (obj, args) => { tcs.SetResult(null); });
@@ -32,7 +27,8 @@ namespace InOutLog.Droid
         {
             TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
 
-            var alert = new AlertDialog.Builder(_context);
+            var activity = CrossCurrentActivity.Current.Activity;
+            var alert = new AlertDialog.Builder(activity);
             alert.SetTitle(title);
             alert.SetMessage(message);
             alert.SetPositiveButton("Yes", (obj, args) => { yesAction(); tcs.SetResult(null); });

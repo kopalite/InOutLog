@@ -19,7 +19,7 @@ namespace InOutLog.Desk
             _dialog = Externals.Resolve<IDialog>();
         }
 
-        public async Task StartSignInAsync(params object[] args)
+        public async Task StartSignInAsync()
         {
 
             AuthData authData = null;

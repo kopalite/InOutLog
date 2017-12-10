@@ -25,24 +25,21 @@ namespace InOutLog.Droid
         {
             base.OnCreate(bundle);
 
-            Externals.Register<IAuthManager>(() => new AuthManager(), true);
-            Externals.Register<ISafeUI>(() => new SafeUI());
-            Externals.Register<IDialog>(() => new Dialog(this));
-
-            Externals.Lock();
-
             _mainViewModel = new MainViewModel();
-            await _mainViewModel.AuthManager.StartSignInAsync(this);
+            await _mainViewModel.AuthManager.StartSignInAsync();
         }
 
         protected override async void OnNewIntent(Intent intent)
         {
             base.OnNewIntent(intent);
-            
-            await _mainViewModel.AuthManager.AfterSignInAsync(intent);
-            await _mainViewModel.Watcher.StartupAsync();
 
-            SetContentViewBindings();
+            if (_mainViewModel.AuthManager.AuthData == null)
+            {
+                await _mainViewModel.AuthManager.AfterSignInAsync(intent);
+                await _mainViewModel.Watcher.StartupAsync();
+
+                SetContentViewBindings();
+            }
         }
 
         private void SetContentViewBindings()

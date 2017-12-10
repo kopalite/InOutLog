@@ -13,6 +13,7 @@ namespace InOutLog.Desk
             Externals.Register<IAuthManager>(() => new AuthManager(), true);
             Externals.Register<ISafeUI>(() => new SafeUI());
             Externals.Register<IDialog>(() => new Dialog());
+            Externals.Lock();
 
             base.OnStartup(e);
         }

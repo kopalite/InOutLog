@@ -7,7 +7,7 @@ namespace InOutLog.Core
     {
         AuthData AuthData { get; }
 
-        Task StartSignInAsync(params object[] args);
+        Task StartSignInAsync();
 
         Task AfterSignInAsync(params object[] args);
     }

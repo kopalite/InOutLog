@@ -3,6 +3,7 @@ using Android.Content;
 using Auth0.OidcClient;
 using IdentityModel.OidcClient;
 using InOutLog.Core;
+using Plugin.CurrentActivity;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -24,14 +25,14 @@ namespace InOutLog.Droid
             _dialog = Externals.Resolve<IDialog>();
         }
 
-        public async Task StartSignInAsync(params object[] args)
+        public async Task StartSignInAsync()
         {
             AuthData authData = null;
             
             var domain =   Settings.AuthDomain;
             var clientId = Settings.AuthClientId;
             var audience = Settings.AuthAudience;
-            var activity = args[0] as Activity;
+            var activity = CrossCurrentActivity.Current.Activity;
 
             _authClient = new Auth0Client(new Auth0ClientOptions
             {

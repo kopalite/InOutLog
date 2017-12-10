@@ -18,12 +18,12 @@ namespace InOutLog.Core
                     {
                         tuple.Item1(tuple.Item2);
                     }
-                        
+
                     else
                     {
                         await Task.Run(() => tuple.Item1(tuple.Item2));
                     }
-                        
+
 
                     await Task.Delay(millisecondsPeriod, Token).ConfigureAwait(false);
                 }
